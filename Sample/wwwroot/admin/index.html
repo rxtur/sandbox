@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>BlogiFire Dashboard</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/toastr.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+	<script src="js/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body class="ltr" ng-app="blogifire">
+    <div ui-view></div>
+    <div class="footer">
+        <div class="pull-left">&copy; <a href="#">BlogiFire</a> 0.1</div>
+    </div>
+    <!-- Library Scripts -->
+    <script src="js/angular.js"></script>
+    <script src="js/angular-resource.js"></script>
+    <script src="js/angular-mocks.js"></script>
+    <script src="js/angular-ui-router.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/toastr.min.js"></script>
+    <script src="js/scripts.js"></script>
+    <!-- Application Script -->
+    <script src="app/app.js"></script>
+    <!-- Services -->
+    <script src="common/services/common.services.js"></script>
+    <script src="common/services/postResource.js"></script>
+    <script src="common/services/postResourceMock.js"></script>
+    <!-- Product Controllers -->
+    <script src="app/posts/postListCtrl.js"></script>
+    <script src="app/posts/postEditCtrl.js"></script>
+    <script src="app/help/helpCtrl.js"></script>
+    <script src="app/settings/settingsCtrl.js"></script>
+    <script src="app/profile/profileCtrl.js"></script>
+</body>
+</html>
