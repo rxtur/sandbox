@@ -46,6 +46,8 @@ namespace Sample
             // You need to add Microsoft.AspNet.Mvc.WebApiCompatShim package to project.json
             // services.AddWebApiConventions();
 
+            services.AddSingleton<BlogiFire.Models.IPostRepository, BlogiFire.Models.PostRepository>();
+            services.AddSingleton<BlogiFire.Models.IBlogRepository, BlogiFire.Models.BlogRepository>();
         }
 
         // Configure is called after ConfigureServices is called.
@@ -58,7 +60,7 @@ namespace Sample
             // Add the following to the request pipeline only in development environment.
             if (string.Equals(env.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase))
             {
-                app.UseBrowserLink();
+                //app.UseBrowserLink();
                 app.UseErrorPage(ErrorPageOptions.ShowAll);
                 app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
             }

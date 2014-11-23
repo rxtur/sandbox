@@ -1,4 +1,29 @@
 ﻿@{
-    ViewBag.Title = "Blog posts";
+    Layout = "/Views/Shared/_Layout.cshtml";
+    var posts = (List<BlogiFire.Models.Post>)Model;
+    var empty = posts.Count < 1;
+    var createNew = empty && User.Identity.IsAuthenticated;
 }
 <h2>@ViewBag.Title</h2>
+
+@if (createNew)
+{
+    <p>Create new blog for @User.Identity.Name</p>
+    <p>@Html.ActionLink("Create new blog", "Index", "blogs")</p>
+}
+
+@if (!createNew)
+{
+    if (empty)
+    {
+        <p>You have to log in to create new blog.</p>
+    }
+    else
+    {
+        foreach (var post in posts)
+        {
+            <h3>@post.Title</h3>
+            <p>@Html.Raw(post.Content)</p>
+        }
+    }
+}

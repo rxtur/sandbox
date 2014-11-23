@@ -13,7 +13,7 @@ namespace Sample.Migrations
         {
             get
             {
-                return "201411190324136_bf01";
+                return "201411230628412_bf01";
             }
         }
         
@@ -33,6 +33,8 @@ namespace Sample.Migrations
                 
                 builder.Entity("BlogiFire.Models.Blog", b =>
                     {
+                        b.Property<string>("Author");
+                        b.Property<string>("Description");
                         b.Property<int>("Id")
                             .GenerateValuesOnAdd();
                         b.Property<string>("Name");
@@ -47,7 +49,7 @@ namespace Sample.Migrations
                         b.Property<DateTime>("Created");
                         b.Property<int>("Id")
                             .GenerateValuesOnAdd();
-                        b.Property<bool>("Published");
+                        b.Property<DateTime>("Published");
                         b.Property<string>("Title");
                         b.Key("Id");
                     });

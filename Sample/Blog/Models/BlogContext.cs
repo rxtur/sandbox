@@ -1,8 +1,5 @@
 ﻿using System;
 using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Metadata;
-using Microsoft.Data.Entity.SqlServer;
-using System.Collections.Generic;
 
 namespace BlogiFire.Models
 {
@@ -27,24 +24,5 @@ namespace BlogiFire.Models
             //builder.UseInMemoryStore();
             builder.UseSqlServer("Server=.\\SQLEXPRESS;Database=BlogiFire;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
-    }
-
-    public class Blog
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public virtual List<Post> Posts { get; set; }
-    }
-
-    public class Post
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public int Comments { get; set; }
-        public DateTime Created { get; set; }
-        public bool Published { get; set; }
-        public int BlogId { get; set; }
-        public virtual Blog Blog { get; set; }
     }
 }

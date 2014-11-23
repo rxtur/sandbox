@@ -13,6 +13,8 @@ namespace Sample.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
+                        Author = c.String(),
+                        Description = c.String(),
                         Name = c.String()
                     })
                 .PrimaryKey("PK_Blog", t => t.Id);
@@ -25,7 +27,7 @@ namespace Sample.Migrations
                         Comments = c.Int(nullable: false),
                         Content = c.String(),
                         Created = c.DateTime(nullable: false),
-                        Published = c.Boolean(nullable: false),
+                        Published = c.DateTime(nullable: false),
                         Title = c.String()
                     })
                 .PrimaryKey("PK_Post", t => t.Id);

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using BlogiFire.Models;
@@ -8,28 +6,32 @@ using BlogiFire.Models;
 namespace BlogiFire.Api
 {
     [Route("blog/api/[controller]")]
+    [Authorize]
     public class PostsController : Controller
     {
-        public PostsController()
+        IPostRepository db;
+        public PostsController(IPostRepository db)
         {
+            this.db = db;
         }
 
         // GET: blog/api/posts
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            using (var db = new BlogContext())
-            {
-                var posts = await db.Posts
-                //.Include(p => p.Blog)
-                .OrderBy(p => p.Title)
-                .ToListAsync();
-                return Json(posts);
-            }
+            return Json(await db.All());
         }
 
+        // GET: blog/api/posts/2
+        [HttpGet("{id}")]
+        public async Task<ActionResult> Get(int id)
+        {
+            return Json(await db.GetById(id));
+        }
+
+        // POST: blog/api/posts
         [HttpPost]
-        public async Task<ActionResult> CreatePost([FromBody]Post post)
+        public async Task<ActionResult> Post([FromBody]Post item)
         {
             if (!ModelState.IsValid)
             {
@@ -37,15 +39,24 @@ namespace BlogiFire.Api
                 return new ObjectResult("Model is invalid");
             }
 
-            using (var db = new BlogContext())
+            if (item.Id > 0)
             {
-                await db.Posts.AddAsync(post);
-                await db.SaveChangesAsync();
-
-                Context.Response.StatusCode = 201;
-
-                return new ObjectResult(post);
+                await db.Update(item);
             }
+            else
+            {
+                await db.Add(item);
+                Context.Response.StatusCode = 201;
+            }
+            return new ObjectResult(item);
+        }
+
+        // DELETE: blog/api/posts/2
+        [HttpDelete("{id}")]
+        public async Task<string> Delete(int id)
+        {
+            await db.Delete(id);
+            return "Deleted";
         }
     }
 }

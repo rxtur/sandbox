@@ -1,8 +1,8 @@
 ﻿(function () {
     "use strict";
-    angular.module("blogifire").controller("postEditCtrl", ["post", "$window", postEditCtrl]);
+    angular.module("blogifire").controller("postEditCtrl", ["post", "$state", "$window", postEditCtrl]);
 
-    function postEditCtrl(post, $window) {
+    function postEditCtrl(post, $state, $window) {
         var vm = this;
 
         vm.post = post;
@@ -11,9 +11,10 @@
 
         this.save = function () {
             vm.post.Content = $('.summernote').code();
-            vm.post.$save({}, function (data, headers) {
+
+            vm.post.$save(function (data) {
                 toastr.success('saved');
-            }, function (data, headers) {
+            }, function (data) {
                 toastr.error('failed');
             });
         }
