@@ -13,7 +13,7 @@ namespace Sample.Migrations
         {
             get
             {
-                return "201411230628412_bf01";
+                return "201411260310164_bf01";
             }
         }
         
@@ -45,11 +45,14 @@ namespace Sample.Migrations
                     {
                         b.Property<int>("BlogId");
                         b.Property<int>("Comments");
+                        b.Property<bool>("CommentsEnabled");
                         b.Property<string>("Content");
-                        b.Property<DateTime>("Created");
                         b.Property<int>("Id")
                             .GenerateValuesOnAdd();
                         b.Property<DateTime>("Published");
+                        b.Property<DateTime>("Saved");
+                        b.Property<string>("Slug");
+                        b.Property<string>("Tags");
                         b.Property<string>("Title");
                         b.Key("Id");
                     });

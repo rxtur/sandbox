@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.Data.Entity;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
@@ -16,7 +15,7 @@ namespace BlogiFire.Models
         }
         public async Task<List<Post>> All()
         {
-            return await db.Posts.OrderBy(p => p.Title).ToListAsync();
+            return await db.Posts.OrderByDescending(p => p.Saved).ToListAsync();
         }
         public async Task<List<Post>> Find(Expression<Func<Post, bool>> predicate)
         {
@@ -40,7 +39,7 @@ namespace BlogiFire.Models
                 dbPost.Published = item.Published;
                 dbPost.Title = item.Title;
                 dbPost.Content = item.Content;
-                dbPost.Created = DateTime.UtcNow;
+                dbPost.Saved = DateTime.UtcNow;
 
                 await db.SaveChangesAsync();
             }

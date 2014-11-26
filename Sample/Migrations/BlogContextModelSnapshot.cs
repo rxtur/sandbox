@@ -29,11 +29,14 @@ namespace Sample.Migrations
                     {
                         b.Property<int>("BlogId");
                         b.Property<int>("Comments");
+                        b.Property<bool>("CommentsEnabled");
                         b.Property<string>("Content");
-                        b.Property<DateTime>("Created");
                         b.Property<int>("Id")
                             .GenerateValuesOnAdd();
                         b.Property<DateTime>("Published");
+                        b.Property<DateTime>("Saved");
+                        b.Property<string>("Slug");
+                        b.Property<string>("Tags");
                         b.Property<string>("Title");
                         b.Key("Id");
                     });

@@ -14,6 +14,7 @@ namespace BlogiFire.Controllers
         {
             this.db = db;
         }
+
         // GET: blog/blogs
         public async Task<IActionResult> Index()
         {
@@ -38,6 +39,5 @@ namespace BlogiFire.Controllers
             }
             return new ObjectResult(item);
         }
-
     }
 }

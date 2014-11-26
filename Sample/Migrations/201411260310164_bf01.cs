@@ -25,9 +25,12 @@ namespace Sample.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         BlogId = c.Int(nullable: false),
                         Comments = c.Int(nullable: false),
+                        CommentsEnabled = c.Boolean(nullable: false),
                         Content = c.String(),
-                        Created = c.DateTime(nullable: false),
                         Published = c.DateTime(nullable: false),
+                        Saved = c.DateTime(nullable: false),
+                        Slug = c.String(),
+                        Tags = c.String(),
                         Title = c.String()
                     })
                 .PrimaryKey("PK_Post", t => t.Id);

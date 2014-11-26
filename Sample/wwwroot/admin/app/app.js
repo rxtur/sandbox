@@ -16,6 +16,7 @@
     app.config(["$stateProvider", "$urlRouterProvider",
         function ($stateProvider, $urlRouterProvider) {
             $urlRouterProvider.otherwise("/");
+            //var x = userService();
 
             toastr.options.positionClass = 'toast-bottom-right';
             toastr.options.backgroundpositionClass = 'toast-bottom-right';

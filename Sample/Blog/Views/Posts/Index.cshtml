@@ -1,29 +1,27 @@
 ﻿@{
     Layout = "/Views/Shared/_Layout.cshtml";
-    var posts = (List<BlogiFire.Models.Post>)Model;
+    var posts = (List<BlogiFire.Models.Post>)Model.Posts;
     var empty = posts.Count < 1;
     var createNew = empty && User.Identity.IsAuthenticated;
 }
 <h2>@ViewBag.Title</h2>
 
-@if (createNew)
+@if (User.Identity.IsAuthenticated && Model.Blog == null)
 {
     <p>Create new blog for @User.Identity.Name</p>
     <p>@Html.ActionLink("Create new blog", "Index", "blogs")</p>
 }
 
-@if (!createNew)
+@if (!User.Identity.IsAuthenticated && Model.Posts.Count < 1)
 {
-    if (empty)
-    {
-        <p>You have to log in to create new blog.</p>
-    }
-    else
-    {
-        foreach (var post in posts)
-        {
-            <h3>@post.Title</h3>
-            <p>@Html.Raw(post.Content)</p>
-        }
-    }
+    <div class="alert alert-dismissable alert-info">
+        Blogs not configured yet for this application. 
+        Please <a class="alert-link" href="/Account/Login">log in</a> to create a first blog.
+    </div>
+}
+
+@foreach (var post in posts)
+{
+    <h3><a href="posts/@post.Slug">@post.Title</a></h3>
+    <p>@Html.Raw(post.Content)</p>
 }

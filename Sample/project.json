@@ -18,8 +18,7 @@
         "Microsoft.Framework.CodeGenerators.Mvc": "1.0.0-beta1",
         "Microsoft.Framework.Logging": "1.0.0-beta1",
         "Microsoft.Framework.Logging.Console": "1.0.0-beta1",
-        "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta1",
-"BlogiFire.Core": "1.0.0-*"
+        "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta1"
     },
     "commands": {
         /* Change the port number when you are self hosting this application */

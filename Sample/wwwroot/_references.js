@@ -71,3 +71,5 @@
 /// <reference path="admin/common/services/postresourcemock.js" />
 /// <reference path="admin/js/angular-resource.js" />
 /// <reference path="admin/js/angular-mocks.js" />
+/// <reference path="admin/common/services/userservice.js" />
+/// <reference path="admin/app/user/userctrl.js" />

@@ -1,13 +1,12 @@
 <div class="header">
 	<ul class="nav-actions">
-		<li>
-			<a href="#/posts/0"><i class="fa fa-plus"></i>Add Post</a>
-		</li>
+        <li><a href="#/posts"><i class="fa fa-home"></i>Home</a></li>
 	</ul>
 	<ul class="nav-actions">
-		<li><a href="#"><i class="fa fa-times"></i>Delete</a></li>
-		<li><a href="#"><i class="fa fa-minus"></i>Archive</a></li>
+        <li><a href="#/posts/0"><i class="fa fa-plus"></i>Add</a></li>
 		<li><a href="#"><i class="fa fa-check"></i>Publish</a></li>
+        <li><a href="#"><i class="fa fa-minus"></i>Unpublish</a></li>
+        <li><a href="#"><i class="fa fa-times"></i>Delete</a></li>
 	</ul>
 	<div class="user-section">
 		<i class="user-avatar fa fa-user"></i>
@@ -39,8 +38,8 @@
                 <td><input type="checkbox" /></td>
 				<td><a href="#/posts/{{post.Id}}">{{post.Title}}</a></td>
 				<td><span class="badge">{{post.Comments}}</span></td>
-				<td>{{post.Created  | date:'yyyy-MM-dd h:mma'}}</td>
-				<td><i ng-class="post.Published ? 'fa fa-toggle-on' : 'fa fa-toggle-off'"></i></td>
+				<td>{{post.Saved  | date:'yyyy-MM-dd h:mma'}}</td>
+				<td><i ng-class="post.Visible ? 'fa fa-toggle-on' : 'fa fa-toggle-off'"></i></td>
 			</tr>
 		</tbody>
 	</table>

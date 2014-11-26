@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using BlogiFire.Models;
@@ -9,24 +10,30 @@ namespace BlogiFire.Api
     [Authorize]
     public class PostsController : Controller
     {
-        IPostRepository db;
-        public PostsController(IPostRepository db)
-        {
-            this.db = db;
-        }
+        #region Constructor and private members
 
+        IPostRepository postsDb;
+        IBlogRepository blogsDb;
+        public PostsController(IPostRepository postsDb, IBlogRepository blogsDb)
+        {
+            this.postsDb = postsDb;
+            this.blogsDb = blogsDb;
+        }
+        
+        #endregion
+        
         // GET: blog/api/posts
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            return Json(await db.All());
+            return Json(await postsDb.All());
         }
 
         // GET: blog/api/posts/2
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            return Json(await db.GetById(id));
+            return Json(await postsDb.GetById(id));
         }
 
         // POST: blog/api/posts
@@ -39,23 +46,43 @@ namespace BlogiFire.Api
                 return new ObjectResult("Model is invalid");
             }
 
-            if (item.Id > 0)
+            try
             {
-                await db.Update(item);
+                item.Saved = DateTime.UtcNow;
+
+                if (item.Id > 0)
+                {
+                    await postsDb.Update(item);
+                }
+                else
+                {
+                    var blogs = await blogsDb.Find(b => b.Author.ToLower() == User.Identity.Name);
+
+                    if (blogs.Count > 0)
+                    {
+                        var blog = blogs.FirstOrDefault();
+                        item.BlogId = blog.Id;
+                    }
+
+                    await postsDb.Add(item);
+                    Context.Response.StatusCode = 201;
+                }
+                return new ObjectResult(item);
             }
-            else
+            catch (Exception ex)
             {
-                await db.Add(item);
-                Context.Response.StatusCode = 201;
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                throw;
             }
-            return new ObjectResult(item);
+
+
         }
 
         // DELETE: blog/api/posts/2
         [HttpDelete("{id}")]
         public async Task<string> Delete(int id)
         {
-            await db.Delete(id);
+            await postsDb.Delete(id);
             return "Deleted";
         }
     }
