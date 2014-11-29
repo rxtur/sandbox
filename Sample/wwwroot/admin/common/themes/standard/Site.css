@@ -1,0 +1,22 @@
+﻿.header-bkg {
+    background-color: #fff;
+    background-image: url(site.jpg);
+    border-bottom: 2px solid #ccc;
+    height: 145px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.header-box{
+    margin: 0;
+    padding: 20px;
+}
+
+.header-bkg h2 {
+    font-size: 32px;
+    color: #00ff21;
+}
+.header-bkg p {
+    font-size: 18px;
+    color: #00ff21;
+}

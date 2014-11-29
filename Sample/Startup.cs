@@ -48,6 +48,7 @@ namespace Sample
 
             services.AddSingleton<BlogiFire.Models.IPostRepository, BlogiFire.Models.PostRepository>();
             services.AddSingleton<BlogiFire.Models.IBlogRepository, BlogiFire.Models.BlogRepository>();
+            services.AddSingleton<BlogiFire.Models.ISettingsRepository, BlogiFire.Models.SettingRepository>();
         }
 
         // Configure is called after ConfigureServices is called.

@@ -15,22 +15,23 @@
 
     app.config(["$stateProvider", "$urlRouterProvider",
         function ($stateProvider, $urlRouterProvider) {
-            $urlRouterProvider.otherwise("/");
-            //var x = userService();
-
             toastr.options.positionClass = 'toast-bottom-right';
             toastr.options.backgroundpositionClass = 'toast-bottom-right';
+
+            $urlRouterProvider.otherwise("/");
 
             $stateProvider
             .state("postList", {
                 url: "/",
                 templateUrl: "app/posts/postListView.html",
-                controller: "postListCtrl as vm"
+                controller: "postListCtrl as vm",
+                authenticate: true
             })
  			.state("postEdit", {
  				url: "/posts/:Id",
  				templateUrl: "app/posts/postEditView.html",
  				controller: "postEditCtrl as vm",
+ 				authenticate: true,
  				resolve: {
  				    postResource: "postResource",
  				    post: function (postResource, $stateParams) {
@@ -42,18 +43,31 @@
             .state("settings", {
                 url: "/settings",
                 templateUrl: "app/settings/settings.html",
-                controller: "SettingsCtrl as vm"
+                controller: "SettingsCtrl as vm",
+                authenticate: true
             })
             .state("help", {
                 url: "/help",
                 templateUrl: "app/help/help.html",
-                controller: "HelpCtrl as vm"
+                controller: "HelpCtrl as vm",
+                authenticate: true
             })
             .state("profile", {
                 url: "/profile",
                 templateUrl: "app/profile/profile.html",
-                controller: "ProfileCtrl as vm"
+                controller: "ProfileCtrl as vm",
+                authenticate: true
             })
         }]
     );
+
+    app.run(function ($rootScope, $state, authService) {
+        $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
+          // check authentication and redirect to login if false
+          if (toState.authenticate && !authService.isAuthenticated) {
+              window.location.href = '/account/login';
+          }
+      });
+  });
+
 }());

@@ -15,11 +15,21 @@ namespace BlogiFire.Models
         }
         public async Task<List<Post>> All()
         {
-            return await db.Posts.OrderByDescending(p => p.Saved).ToListAsync();
+            return await db.Posts.OrderByDescending(p => p.Published).ToListAsync();
         }
-        public async Task<List<Post>> Find(Expression<Func<Post, bool>> predicate)
+        public async Task<List<Post>> Find(Expression<Func<Post, bool>> predicate, int page = 1, int pageSize = 10)
         {
-            return await db.Posts.Where(predicate).ToListAsync();
+            var skip = page * pageSize - pageSize;
+            var posts = db.Posts.Where(predicate).OrderByDescending(p => p.Published);
+
+            if (skip == 0)
+            {
+                return await posts.Take(pageSize).ToListAsync();
+            }
+            else
+            {
+                return await posts.Skip(skip).Take(pageSize).ToListAsync();
+            }          
         }
         public async Task<Post> GetById(int id)
         {

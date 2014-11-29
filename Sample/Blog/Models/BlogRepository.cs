@@ -15,7 +15,7 @@ namespace BlogiFire.Models
         }
         public async Task<List<Blog>> All()
         {
-            return await db.Blogs.OrderBy(b => b.Name).ToListAsync();
+            return await db.Blogs.OrderBy(b => b.Title).ToListAsync();
         }
         public async Task<List<Blog>> Find(Expression<Func<Blog, bool>> predicate)
         {
@@ -29,6 +29,8 @@ namespace BlogiFire.Models
         {
             db.Blogs.Add(item);
             await db.SaveChangesAsync();
+
+            await Seed(item);
         }
         public async Task Update(Blog item)
         {
@@ -36,7 +38,7 @@ namespace BlogiFire.Models
             {
                 var dbItem = db.Blogs.SingleOrDefault(i => i.Id == item.Id);
 
-                dbItem.Name = item.Name;
+                dbItem.Title = item.Title;
 
                 await db.SaveChangesAsync();
             }
@@ -50,6 +52,28 @@ namespace BlogiFire.Models
         {
             var item = await db.Blogs.FirstOrDefaultAsync(i => i.Id == id);
             db.Blogs.Remove(item);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task Seed(Blog blog)
+        {
+            var blogPosts = db.Posts.Where(p => p.BlogId == blog.Id);
+            if(blogPosts == null || blogPosts.Count() == 0)
+            {
+                for (int i = 1; i <= 25; i++)
+                {
+                    var post = new Post();
+                    post.BlogId = blog.Id;
+                    post.AuthorName = blog.AuthorName;
+                    post.Title = string.Format("Post title{0}", i);
+                    post.Slug = string.Format("post-title{0}", i);
+                    post.Content = string.Format("This is content of the post {0}.", i);
+                    post.Published = DateTime.UtcNow.AddHours((i - 26) * 5);
+                    post.Saved = post.Published;
+
+                    db.Posts.Add(post);
+                }
+            }         
             await db.SaveChangesAsync();
         }
     }

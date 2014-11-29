@@ -6,7 +6,6 @@ using BlogiFire.Models;
 
 namespace BlogiFire.Controllers
 {
-    [Route("blog/[controller]")]
     public class BlogsController : Controller
     {
         IBlogRepository db;
@@ -15,17 +14,31 @@ namespace BlogiFire.Controllers
             this.db = db;
         }
 
-        // GET: blog/blogs
+        [Route("blog/new")]
         public async Task<IActionResult> Index()
         {
-            ViewBag.Title = "Create new blog";
+            ViewBag.Title = "New blog";
 
-            var items = await db.All();
-            return View("~/Blog/Views/Blogs/Index.cshtml", items);
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/account/login");
+            }
+
+            var blogs = await db.Find(b => b.AuthorId == User.Identity.Name);
+            var blog = blogs.FirstOrDefault();
+
+            if(blog == null)
+            {
+                blog = new Blog();
+                blog.AuthorId = User.Identity.Name;
+                blog.AuthorName = User.Identity.Name;
+            }
+
+            return View("~/Blog/Views/Blogs/New.cshtml", blog);
         }
 
-        // POST: blog/blogs
-        [HttpPost]
+        // POST: blog/create
+        [Route("blog/create")]
         public async Task<ActionResult> Post([FromBody]Blog item)
         {
             if (item.Id > 0)
@@ -35,9 +48,11 @@ namespace BlogiFire.Controllers
             else
             {
                 await db.Add(item);
+
                 Context.Response.StatusCode = 201;
             }
             return new ObjectResult(item);
         }
+
     }
 }

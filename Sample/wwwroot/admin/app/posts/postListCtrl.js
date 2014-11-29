@@ -1,23 +1,25 @@
 (function () {
     "use strict";
     angular.module("blogifire").controller("postListCtrl",
-        ["$window", "postResource", "dataService", postListCtrl]);
+        ["$window", "postResource", postListCtrl]);
 
-    function postListCtrl($window, postResource, dataService) {
+    function postListCtrl($window, postResource) {
         var vm = this;
-
-        dataService.getItems('/blog/api/author')
-        .success(function (usr) {
-            if (!usr || !usr.IsAuthenticated) {
-                $window.location.href = '/account/login';
-            }
-        })
-        .error(function () {
-            toastr.error("error");
-        });
+        vm.pager = {};
+        vm.pager.items = [];
 
         postResource.query(function (data) {
-            vm.posts = data;
+            angular.copy(data, vm.pager.items);
+            initPager(vm.pager);
         });
+
+        vm.prevPage = function () {
+            vm.pager.prevPage();
+            postResource.query();
+        }
+        vm.nextPage = function () {
+            vm.pager.nextPage();
+            postResource.query();
+        }
     }
 }());

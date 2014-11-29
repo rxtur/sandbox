@@ -1,6 +1,6 @@
 <div class="header">
 	<ul class="nav-actions">
-        <li><a href="#/posts"><i class="fa fa-home"></i>Home</a></li>
+        <li><a href="/blog"><i class="fa fa-home"></i>Home</a></li>
 	</ul>
 	<ul class="nav-actions">
         <li><a href="#/posts/0"><i class="fa fa-plus"></i>Add</a></li>
@@ -34,13 +34,17 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="post in vm.posts">
+            <tr ng-repeat="post in vm.pager.pagedItems[vm.pager.currentPage]">
                 <td><input type="checkbox" /></td>
-				<td><a href="#/posts/{{post.Id}}">{{post.Title}}</a></td>
-				<td><span class="badge">{{post.Comments}}</span></td>
-				<td>{{post.Saved  | date:'yyyy-MM-dd h:mma'}}</td>
-				<td><i ng-class="post.Visible ? 'fa fa-toggle-on' : 'fa fa-toggle-off'"></i></td>
-			</tr>
+                <td><a href="#/posts/{{post.Id}}">{{post.Title}}</a></td>
+                <td><span class="badge">{{post.Comments}}</span></td>
+                <td>{{post.Saved  | date:'yyyy-MM-dd h:mma'}}</td>
+                <td><i ng-class="post.Visible ? 'fa fa-toggle-on' : 'fa fa-toggle-off'"></i></td>
+            </tr>
 		</tbody>
 	</table>
+    <ul class="pager">
+        <li ng-if="vm.pager.currentPage > 0" class="next"><a href="" ng-click="vm.prevPage()">Newer &rarr;</a></li>
+        <li ng-if="vm.pager.currentPage + 1 < vm.pager.pagedItems.length" class="previous"><a href="" ng-click="vm.nextPage()">&larr; Older</a></li>
+    </ul>
 </div>

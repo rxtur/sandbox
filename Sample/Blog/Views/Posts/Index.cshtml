@@ -1,27 +1,41 @@
 ﻿@{
     Layout = "/Views/Shared/_Layout.cshtml";
-    var posts = (List<BlogiFire.Models.Post>)Model.Posts;
-    var empty = posts.Count < 1;
-    var createNew = empty && User.Identity.IsAuthenticated;
+    //Layout = "/Blog/Views/Themes/Standard/_Layout.cshtml";
+    var posts = (List<BlogiFire.Models.Post>)Model;
+    int olderPage = (int)ViewBag.OlderPage;
+    int newerPage = (int)ViewBag.NewerPage;
 }
-<h2>@ViewBag.Title</h2>
+<div class="posts">
+    @foreach (var post in posts)
+    {
+    <article itemprop="blogPost" itemtype="http://schema.org/BlogPosting" itemscope="" data-id="@post.Slug" class="post">
+        <header class="jumbotron">
+            <h1 itemprop="headline name">
+                <a href="/blog/post/@post.Slug" itemprop="url">@post.Title</a>
+            </h1>
+            <div>
+                <span>By @post.AuthorName on</span>
+                <abbr title="@post.Published.ToLocalTime()" itemprop="datePublished">@post.Published.ToLocalTime().ToString("MMMM d. yyyy")</abbr>
+                <a href="/blog/post/@post.Slug#comments" class="pull-right">
+                    <em class="glyphicon glyphicon-comment"></em>
+                    @post.Comments Comments
+                </a>
+            </div>
+        </header> 
+        <div itemprop="articleBody">
+            @Html.Raw(post.Content)
+        </div>
+    </article>
+    }
+</div>
+<ul class="pager">
+    @if (newerPage > 0)
+    {
+        <li class="next"><a href="/blog/page/@newerPage">Newer →</a></li>
+    }
+    @if (olderPage > 0)
+    {
+        <li class="previous"><a href="/blog/page/@olderPage">← Older</a></li>
+    }
+</ul>
 
-@if (User.Identity.IsAuthenticated && Model.Blog == null)
-{
-    <p>Create new blog for @User.Identity.Name</p>
-    <p>@Html.ActionLink("Create new blog", "Index", "blogs")</p>
-}
-
-@if (!User.Identity.IsAuthenticated && Model.Posts.Count < 1)
-{
-    <div class="alert alert-dismissable alert-info">
-        Blogs not configured yet for this application. 
-        Please <a class="alert-link" href="/Account/Login">log in</a> to create a first blog.
-    </div>
-}
-
-@foreach (var post in posts)
-{
-    <h3><a href="posts/@post.Slug">@post.Title</a></h3>
-    <p>@Html.Raw(post.Content)</p>
-}

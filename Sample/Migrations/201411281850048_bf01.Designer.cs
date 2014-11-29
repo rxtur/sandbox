@@ -13,7 +13,7 @@ namespace Sample.Migrations
         {
             get
             {
-                return "201411260310164_bf01";
+                return "201411281850048_bf01";
             }
         }
         
@@ -33,28 +33,51 @@ namespace Sample.Migrations
                 
                 builder.Entity("BlogiFire.Models.Blog", b =>
                     {
-                        b.Property<string>("Author");
+                        b.Property<string>("AuthorEmail");
+                        b.Property<string>("AuthorId");
+                        b.Property<string>("AuthorName");
+                        b.Property<int>("DaysToComment");
                         b.Property<string>("Description");
                         b.Property<int>("Id")
                             .GenerateValuesOnAdd();
-                        b.Property<string>("Name");
+                        b.Property<string>("Image");
+                        b.Property<bool>("IsModerated");
+                        b.Property<bool>("IsSelected");
+                        b.Property<int>("PostsPerPage");
+                        b.Property<string>("Theme");
+                        b.Property<string>("Title");
                         b.Key("Id");
+                        b.ForRelational().Table("bf_blogs");
                     });
                 
                 builder.Entity("BlogiFire.Models.Post", b =>
                     {
+                        b.Property<string>("AuthorName");
                         b.Property<int>("BlogId");
                         b.Property<int>("Comments");
                         b.Property<bool>("CommentsEnabled");
                         b.Property<string>("Content");
                         b.Property<int>("Id")
                             .GenerateValuesOnAdd();
+                        b.Property<bool>("IsSelected");
                         b.Property<DateTime>("Published");
                         b.Property<DateTime>("Saved");
                         b.Property<string>("Slug");
                         b.Property<string>("Tags");
                         b.Property<string>("Title");
                         b.Key("Id");
+                        b.ForRelational().Table("bf_posts");
+                    });
+                
+                builder.Entity("BlogiFire.Models.Setting", b =>
+                    {
+                        b.Property<int>("BlogId");
+                        b.Property<int>("Id")
+                            .GenerateValuesOnAdd();
+                        b.Property<string>("SettingKey");
+                        b.Property<string>("SettingValue");
+                        b.Key("Id");
+                        b.ForRelational().Table("bf_settings");
                     });
                 
                 return builder.Model;

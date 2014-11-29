@@ -12,16 +12,29 @@ namespace BlogiFire.Models
 
     public class Blog
     {
+        public Blog()
+        {
+            PostsPerPage = 10;
+            DaysToComment = 0;
+            IsModerated = false;
+            Theme = "standard";
+            Image = "site.jpg";
+        }
         public int Id { get; set; }
         [Required]
-        [StringLength(120, MinimumLength = 2)]
-        public string Name { get; set; }
+        public string Title { get; set; }
         [Required]
-        [StringLength(160, MinimumLength = 2)]
         public string Description { get; set; }
         [Required]
-        [StringLength(100, MinimumLength = 2)]
-        public string Author { get; set; }
+        public string AuthorId { get; set; }
+        public string AuthorName { get; set; }
+        public string AuthorEmail { get; set; }
+        public int PostsPerPage { get; set; }
+        public int DaysToComment { get; set; }
+        public bool IsModerated { get; set; }
+        public string Theme { get; set; }
+        public string Image { get; set; }
+        public bool IsSelected { get; set; }
     }
 
     public class Post
@@ -30,18 +43,16 @@ namespace BlogiFire.Models
         [Required]
         public int BlogId { get; set; }
         [Required]
-        [StringLength(160, MinimumLength = 2)]
         public string Title { get; set; }
         [Required]
-        [StringLength(160, MinimumLength = 2)]
         public string Slug { get; set; }
         public string Content { get; set; }
-        [StringLength(250, MinimumLength = 2)]
         public string Tags { get; set; }
         public int Comments { get; set; }
         public bool CommentsEnabled { get; set; }
         public DateTime Saved { get; set; }
         public DateTime Published { get; set; }
+        public string AuthorName { get; set; }
         public bool Visible
         {
             get
@@ -52,5 +63,14 @@ namespace BlogiFire.Models
                 return Published <= DateTime.UtcNow ? true : false;
             }
         }
+        public bool IsSelected { get; set; }
+    }
+
+    public class Setting
+    {
+        public int Id { get; set; }
+        public int BlogId { get; set; }
+        public string SettingKey { get; set; }
+        public string SettingValue { get; set; }
     }
 }

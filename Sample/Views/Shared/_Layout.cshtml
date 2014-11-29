@@ -24,7 +24,11 @@
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>
                         <li>@Html.ActionLink("About", "About", "Home")</li>
                         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        <li><a href="~/Blog/Posts" title="Blog">Blog</a></li>
+                        <li><a href="~/Blog" title="Blog">Blog</a></li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li><a href="~/admin" title="Admin">Admin</a></li>
+                        }
                     </ul>
                     @await Html.PartialAsync("_LoginPartial")
                 </div>

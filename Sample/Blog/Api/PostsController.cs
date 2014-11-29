@@ -56,7 +56,7 @@ namespace BlogiFire.Api
                 }
                 else
                 {
-                    var blogs = await blogsDb.Find(b => b.Author.ToLower() == User.Identity.Name);
+                    var blogs = await blogsDb.Find(b => b.AuthorId.ToLower() == User.Identity.Name);
 
                     if (blogs.Count > 0)
                     {

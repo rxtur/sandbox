@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    //Layout = "/Blog/Views/Themes/Standard/_Layout.cshtml";
+    var post = (BlogiFire.Models.Post)Model;
+}
+<article itemprop="blogPost" itemtype="http://schema.org/BlogPosting" itemscope="" data-id="@post.Slug" class="post">
+    <header class="jumbotron">
+        <h1 itemprop="headline name">
+            <a href="/blog/post/@post.Slug" itemprop="url">@post.Title</a>
+        </h1>
+        <div>
+            <span>By @post.AuthorName on</span>
+            <abbr title="@post.Published.ToLocalTime()" itemprop="datePublished">@post.Published.ToLocalTime().ToString("MMMM d. yyyy")</abbr>
+            <a href="/blog/post/@post.Slug#comments" class="pull-right">
+                <em class="glyphicon glyphicon-comment"></em>
+                @post.Comments Comments
+            </a>
+        </div>
+    </header>
+    <div itemprop="articleBody">
+        @Html.Raw(post.Content)
+    </div>
+</article>
