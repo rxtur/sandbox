@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-Sample-5a6ab781-b213-40dc-838a-e341781a7b93",
 
   "dependencies": {
@@ -35,10 +35,11 @@
       "version": "1.0.0-preview1-final",
       "type": "build"
     },
-    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc":  {
+    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
       "version": "1.0.0-preview1-final",
       "type": "build"
-    }
+    },
+    "Blogifier.Core": "1.0.0-*"
   },
 
   "tools": {
