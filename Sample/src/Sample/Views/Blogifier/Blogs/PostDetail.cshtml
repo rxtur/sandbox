@@ -1,0 +1,21 @@
+﻿@{
+    var theme = "Standard";
+    Layout = "~/Views/Blogifier/Themes/" + theme + "/_Layout.cshtml";
+}
+<div class="blog-post">
+    <h2 class="blog-post-title">Blog post one</h2>
+    <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
+    <p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.</p>
+    <p>Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.</p>
+</div>
+<form role="form">
+    <div class="form-group">
+        <label for="email">Email address:</label>
+        <input type="email" class="form-control" id="email">
+    </div>
+    <div class="form-group">
+        <label for="comment">Comment:</label>
+        <textarea class="form-control" rows="5" id="comment"></textarea>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>

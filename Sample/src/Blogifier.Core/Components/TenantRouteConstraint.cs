@@ -16,27 +16,26 @@ namespace Blogifier.Core.Components
             RouteValueDictionary values, 
             RouteDirection routeDirection)
         {
-            if(httpContext.Request.ContentType == "text/html")
+            try
             {
-                
+                var tenants = new List<string>();
+                tenants.Add("foo");
+                tenants.Add("bar");
+
+                var tenant = values["tenant"];
+                if (tenants.Contains(tenant))
+                {
+                    // set current tenant (blog) here
+                    //var a = httpContext.Request.Headers;
+                    //var x = httpContext.Request.Path;
+                    //System.Diagnostics.Debug.WriteLine(x);
+                    return true;
+                }
             }
-
-            var tenants = new List<string>();
-            tenants.Add("foo");
-            tenants.Add("bar");
-
-            var tenant = values["tenant"];
-            if (tenants.Contains(tenant))
+            catch (Exception)
             {
-                // set current tenant (blog) here
-
-                var a = httpContext.Request.Headers;
-
-                var x = httpContext.Request.Path;
-                System.Diagnostics.Debug.WriteLine(x);
-                return true;
+                return false;
             }
-
             return false;
         }
     }
