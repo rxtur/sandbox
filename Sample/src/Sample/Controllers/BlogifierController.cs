@@ -6,36 +6,105 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blogifier.Controllers
 {
-    [Route("blogs/{tenant}")]
     public class BlogsController : Controller
     {
-        // GET: blogs/foo (post list)
+        #region Blog routes
+
+        [Route("blogs")]
         public IActionResult Index()
         {
             ViewBag.Title = "Blog list";
-            return View("~/Views/Blogifier/Blogs/Index.cshtml");
+            return View("~/Views/Blogifier/PostList.cshtml");
         }
 
-        // GET: blogs/foo/my-post (single post)
-        [Route("{slug}")]
-        public IActionResult Posts(string slug)
+        [Route("blogs/{tenant}")]
+        public IActionResult AuthorPosts(string tenant)
         {
+            if (!TenantExists(tenant))
+                return View("Error");
+
+            ViewBag.Title = "Posts by " + tenant;
+            return View("~/Views/Blogifier/PostList.cshtml");
+        }
+
+        [Route("blogs/{tenant}/{slug}")]
+        public IActionResult SinglePost(string tenant, string slug)
+        {
+            if (!TenantExists(tenant))
+                return View("Error");
+
             ViewBag.Title = "Post " + slug;
-            return View("~/Views/Blogifier/Blogs/PostDetail.cshtml");
+            return View("~/Views/Blogifier/SinglePost.cshtml");
         }
 
-        [Route("admin")]
-        public IActionResult Admin()
+        #endregion
+
+        #region Categories and tags
+
+        [Route("category/{tenant}/{name}")]
+        public IActionResult Category(string tenant, string name)
         {
-            ViewBag.Title = "Admin";
-            return View("~/Views/Blogifier/Admin/Index.cshtml");
+            if (!TenantExists(tenant))
+                return View("Error");
+
+            ViewBag.Title = "Categories";
+            return View("~/Views/Blogifier/PostList.cshtml");
         }
 
-        [Route("profile")]
-        public IActionResult Profile()
+        [Route("tag/{tenant}/{name}")]
+        public IActionResult Tag(string tenant, string name)
         {
+            if (!TenantExists(tenant))
+                return View("Error");
+
+            ViewBag.Title = "Tags";
+            return View("~/Views/Blogifier/PostList.cshtml");
+        }
+
+        #endregion
+
+        #region Admin routes
+
+        [Route("admin/{tenant}/new")]
+        public IActionResult AdminNew(string tenant)
+        {
+            if (!TenantExists(tenant))
+                return View("Error");
+
             ViewBag.Title = "Admin";
-            return View("~/Views/Blogifier/Admin/Profile.cshtml");
+            return View("~/Views/Blogifier/PostEditor.cshtml");
+        }
+
+        [Route("admin/{tenant}/profile")]
+        public IActionResult AdminProfile(string tenant)
+        {
+            if (!TenantExists(tenant))
+                return View("Error");
+
+            ViewBag.Title = "Admin";
+            return View("~/Views/Blogifier/Profile.cshtml");
+        }
+
+        [Route("admin/{tenant}/{slug}")]
+        public IActionResult AdminEdit(string tenant, string slug)
+        {
+            if (!TenantExists(tenant))
+                return View("Error");
+
+            ViewBag.Title = "AdminEdit";
+            return View("~/Views/Blogifier/PostEditor.cshtml");
+        }
+
+        #endregion
+
+        private bool TenantExists(string tenant)
+        {
+            if (tenant == "bob")
+                return true;
+            if (tenant == "sam")
+                return true;
+
+            return false;
         }
 
     }

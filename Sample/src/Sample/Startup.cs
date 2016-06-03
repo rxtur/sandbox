@@ -89,16 +89,8 @@ namespace Sample
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "tenant",
-                    template: "{tenant}/{controller}/{action}/{id?}",
-                    defaults: new { controller = "Blogs", action = "Index" },
-                    constraints: new { name = new Blogifier.Core.Components.TenantRouteConstraint() }
-                );
-
-                routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}"
-                );
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -19,10 +19,15 @@ namespace Blogifier.Core.Components
             try
             {
                 var tenants = new List<string>();
-                tenants.Add("foo");
-                tenants.Add("bar");
+
+                tenants.Add("bob");
+                tenants.Add("sam");
+                tenants.Add("ann");
 
                 var tenant = values["tenant"];
+
+                var fullAddress = httpContext.Request.Headers["Host"].ToString().Split('.');
+
                 if (tenants.Contains(tenant))
                 {
                     // set current tenant (blog) here
