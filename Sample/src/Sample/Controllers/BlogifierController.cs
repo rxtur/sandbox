@@ -24,7 +24,8 @@ namespace Blogifier.Controllers
                 return View("Error");
 
             ViewBag.Title = "Posts by " + tenant;
-            return View("~/Views/Blogifier/PostList.cshtml");
+            ViewBag.Author = tenant;
+            return View("~/Views/Blogifier/AuthorPosts.cshtml");
         }
 
         [Route("blogs/{tenant}/{slug}")]
@@ -48,7 +49,8 @@ namespace Blogifier.Controllers
                 return View("Error");
 
             ViewBag.Title = "Categories";
-            return View("~/Views/Blogifier/PostList.cshtml");
+            ViewBag.Category = name;
+            return View("~/Views/Blogifier/CategoryPosts.cshtml");
         }
 
         [Route("tag/{tenant}/{name}")]
