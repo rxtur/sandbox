@@ -3,18 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Blogifier.Core.Models;
+using Blogifier.Core.ViewModels;
+using Blogifier.Core.Infrastructure;
+using Blogifier.Core.Repositories;
 
 namespace Blogifier.Controllers
 {
     public class BlogsController : Controller
     {
+        private BlogifierDbContext _context;
+
+        public BlogsController(BlogifierDbContext context)
+        {
+            _context = context;
+        }
+
         #region Blog routes
 
         [Route("blogs")]
         public IActionResult Index()
         {
             ViewBag.Title = "Blog list";
-            return View("~/Views/Blogifier/PostList.cshtml");
+
+            PostRepository repo = new PostRepository();
+            var x = repo.GetPosts(_context);
+
+            var posts = new PostListVM(_context); // _context.Posts.OrderByDescending(p => p.Published).ToList();
+
+            return View("~/Views/Blogifier/PostList.cshtml", posts);
         }
 
         [Route("blogs/{tenant}")]
@@ -98,6 +115,19 @@ namespace Blogifier.Controllers
         }
 
         #endregion
+
+        [Route("blogs/reset")]
+        public IActionResult DbReset()
+        {
+            ViewBag.Title = "DB reset";
+
+            // this is only to initiate database
+            // and seed data for the very first load
+            var setup = new Setup(_context); 
+            setup.SeedData();
+
+            return View("~/Views/Blogifier/Profile.cshtml");
+        }
 
         private bool TenantExists(string tenant)
         {
