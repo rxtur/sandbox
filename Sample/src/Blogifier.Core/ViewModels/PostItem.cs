@@ -9,6 +9,11 @@ namespace Blogifier.Core.ViewModels
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime Published { get; set; }
+
+        public string AuthorName { get; set; }
+        public string AuthorSlug { get; set; }
+        public string AuthorEmail { get; set; }
+
         public ICollection<CategoryItem> Categories { get; set; }
     }
 }

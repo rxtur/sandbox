@@ -2,19 +2,22 @@
     var theme = "Standard";
     Layout = "~/Views/Blogifier/Themes/" + theme + "/_Layout.cshtml";
 }
-@foreach (var item in Model.Posts)
+@foreach (var item in Model)
 {
     <div class="post">
         <header>
             <h1><a href="/blogs/bob/@item.Slug/">@item.Title</a></h1>
             <div>
-                <span>@string.Format("{0:MMM d, yyyy}", item.Published)</span> |
-                <span><a href="/blogs/bob">Bob</a></span> |
-                <span><a href="/category/bob/cat-number-1">cat-number-1</a></span>
+                <span>@string.Format("{0:MMM d, yyyy}", item.Published)</span>
+                @foreach (var cat in item.Categories)
+                {
+                <span>| <a href="/category/bob/@cat.Slug">@cat.Title</a></span>
+                }
             </div>
         </header>
-        <p>@item.Description</p>
-        <p><a class="btn btn-primary btn-lg" href="/blogs/bob/test-number-two/" role="button">Learn more</a></p>
+        <p>@item.Content</p>
+        <p><a class="btn btn-primary btn-lg" href="/blogs/bob/@item.Slug/" role="button">Learn more</a></p>
+        <p>@item.AuthorName @item.AuthorEmail @item.AuthorSlug</p>
     </div>
 }
 

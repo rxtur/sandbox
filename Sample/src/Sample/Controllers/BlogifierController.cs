@@ -7,29 +7,41 @@ using Blogifier.Core.Models;
 using Blogifier.Core.ViewModels;
 using Blogifier.Core.Infrastructure;
 using Blogifier.Core.Repositories;
+using Blogifier.Core.Repositories.Interfaces;
 
 namespace Blogifier.Controllers
 {
     public class BlogsController : Controller
     {
         private BlogifierDbContext _context;
+        IPostRepository _postDb;
 
-        public BlogsController(BlogifierDbContext context)
+        public BlogsController(BlogifierDbContext context, IPostRepository postsDb)
         {
             _context = context;
+            _postDb = postsDb;
+        }
+
+        [Route("blogs/test")]
+        public async Task<IActionResult> Test()
+        {
+            ViewBag.Title = "Blog posts ";
+            var posts = await _postDb.All();
+
+            var x = posts.ToList();
+
+            return View("~/Views/Blogifier/Profile.cshtml");
         }
 
         #region Blog routes
 
         [Route("blogs")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.Title = "Blog list";
 
-            PostRepository repo = new PostRepository();
-            var x = repo.GetPosts(_context);
-
-            var posts = new PostListVM(_context); // _context.Posts.OrderByDescending(p => p.Published).ToList();
+            //var posts = new PostListVM(_context);
+            var posts = await _postDb.All();
 
             return View("~/Views/Blogifier/PostList.cshtml", posts);
         }
