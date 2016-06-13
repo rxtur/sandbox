@@ -6,18 +6,18 @@
 {
     <div class="post">
         <header>
-            <h1><a href="/blogs/bob/@item.Slug/">@item.Title</a></h1>
+            <h1><a href="/blogs/@item.BlogSlug/@item.Slug/">@item.Title</a></h1>
             <div>
                 <span>@string.Format("{0:MMM d, yyyy}", item.Published)</span>
                 @foreach (var cat in item.Categories)
                 {
-                <span>| <a href="/category/bob/@cat.Slug">@cat.Title</a></span>
+                <span>| <a href="/category/@item.BlogSlug/@cat.Slug">@cat.Title</a></span>
                 }
             </div>
         </header>
         <p>@item.Content</p>
-        <p><a class="btn btn-primary btn-lg" href="/blogs/bob/@item.Slug/" role="button">Learn more</a></p>
-        <p>@item.AuthorName @item.AuthorEmail @item.AuthorSlug</p>
+        <p><a class="btn btn-primary btn-lg" href="/blogs/@item.BlogSlug/@item.Slug/" role="button">Learn more</a></p>
+        <p>@item.AuthorName @item.AuthorEmail @item.BlogSlug</p>
     </div>
 }
 

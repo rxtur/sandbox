@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace Blogifier.Core.Repositories
 {
@@ -15,12 +16,6 @@ namespace Blogifier.Core.Repositories
         {
             _db = db;
         }
-
-        //public async Task<List<Post>> All()
-        //{
-        //    var posts = _db.Posts.AsNoTracking().AsQueryable();
-        //    return await posts.OrderByDescending(p => p.Published).ToListAsync();
-        //}
 
         public async Task<List<PostItem>> All()
         {
@@ -36,7 +31,7 @@ namespace Blogifier.Core.Repositories
                     Content = p.Content,
                     Published = p.Published,
                     AuthorName = p.Blog.AuthorName,
-                    AuthorSlug = p.Blog.Slug,
+                    BlogSlug = p.Blog.Slug,
                     AuthorEmail = p.Blog.AuthorEmail,
                     Categories = new List<CategoryItem>()
                 };
@@ -55,33 +50,9 @@ namespace Blogifier.Core.Repositories
             return await Task.Run(() => posts);
         }
 
-        public List<PostItem> GetPosts(BlogifierDbContext db)
+        public async Task<Post> GetBySlug(string slug)
         {
-            var posts = new List<PostItem>();
-            var postList = db.Posts.AsNoTracking().OrderByDescending(p => p.Published).Include(p => p.PostCategories).ToList();
-
-            foreach (var p in postList)
-            {
-                var item = new PostItem {
-                    Slug = p.Slug,
-                    Title = p.Title,
-                    Content = p.Content,
-                    Published = p.Published,
-                    Categories = new List<CategoryItem>()
-                };
-
-                if(p.PostCategories != null && p.PostCategories.Count > 0)
-                {
-                    foreach (var pc in p.PostCategories)
-                    {
-                        var cat = db.Categories.AsNoTracking().Where(c => c.CategoryId == pc.CategoryId).FirstOrDefault();
-                        var catItem = new CategoryItem { Slug = cat.Slug, Title = cat.Title };
-                        item.Categories.Add(catItem);
-                    }
-                }
-                posts.Add(item);
-            }
-            return posts;
+            return await _db.Posts.AsNoTracking().Include(p => p.Blog).FirstOrDefaultAsync(p => p.Slug == slug);
         }
     }
 }

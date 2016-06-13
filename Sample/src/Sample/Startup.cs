@@ -13,10 +13,6 @@ using Sample.Data;
 using Sample.Models;
 using Sample.Services;
 
-using Blogifier.Core.Models;
-using Blogifier.Core.Repositories;
-using Blogifier.Core.Repositories.Interfaces;
-
 namespace Sample
 {
     public class Startup
@@ -57,10 +53,7 @@ namespace Sample
                 .AddDefaultTokenProviders();
 
             //----------------------------------
-            services.AddSingleton<IPostRepository, PostRepository>();
-
-            var connection = @"Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true";
-            services.AddDbContext<BlogifierDbContext>(options => options.UseSqlServer(connection));
+            Blogifier.Web.Bootstrap.Init.Configure(services);
             //----------------------------------
 
             services.AddMvc();

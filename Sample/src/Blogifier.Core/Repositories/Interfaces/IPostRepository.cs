@@ -8,5 +8,6 @@ namespace Blogifier.Core.Repositories.Interfaces
     public interface IPostRepository
     {
         Task<List<PostItem>> All();
+        Task<Post> GetBySlug(string slug);
     }
 }

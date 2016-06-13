@@ -9,17 +9,19 @@ using Blogifier.Core.Infrastructure;
 using Blogifier.Core.Repositories;
 using Blogifier.Core.Repositories.Interfaces;
 
-namespace Blogifier.Controllers
+namespace Blogifier.Web.Controllers
 {
     public class BlogsController : Controller
     {
         private BlogifierDbContext _context;
         IPostRepository _postDb;
+        IBlogRepository _blogDb;
 
-        public BlogsController(BlogifierDbContext context, IPostRepository postsDb)
+        public BlogsController(BlogifierDbContext context, IPostRepository postsDb, IBlogRepository blogsDb)
         {
             _context = context;
             _postDb = postsDb;
+            _blogDb = blogsDb;
         }
 
         [Route("blogs/test")]
@@ -39,10 +41,7 @@ namespace Blogifier.Controllers
         public async Task<IActionResult> Index()
         {
             ViewBag.Title = "Blog list";
-
-            //var posts = new PostListVM(_context);
             var posts = await _postDb.All();
-
             return View("~/Views/Blogifier/PostList.cshtml", posts);
         }
 
@@ -58,13 +57,14 @@ namespace Blogifier.Controllers
         }
 
         [Route("blogs/{tenant}/{slug}")]
-        public IActionResult SinglePost(string tenant, string slug)
+        public async Task<IActionResult> SinglePost(string tenant, string slug)
         {
             if (!TenantExists(tenant))
                 return View("Error");
 
             ViewBag.Title = "Post " + slug;
-            return View("~/Views/Blogifier/SinglePost.cshtml");
+            var post = await _postDb.GetBySlug(slug);
+            return View("~/Views/Blogifier/SinglePost.cshtml", post);
         }
 
         #endregion
@@ -143,11 +143,17 @@ namespace Blogifier.Controllers
 
         private bool TenantExists(string tenant)
         {
-            if (tenant == "bob")
-                return true;
-            if (tenant == "sam")
-                return true;
-
+            var blogs = _blogDb.BlogsLookup();
+            if(blogs != null && blogs.Count > 0)
+            {
+                foreach (var b in blogs)
+                {
+                    if(b == tenant)
+                    {
+                        return true;
+                    }
+                }
+            }
             return false;
         }
 

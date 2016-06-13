@@ -27,8 +27,8 @@ namespace Blogifier.Core.Infrastructure
 
         private void SeedBlogs()
         {
-            _context.Blogs.Add(new Blog { Title = "Dogs blog", Description = "Awesome blog about dogs", Slug = "dog-blog", Saved = DateTime.Now, AuthorName = "Doug Johnson", AuthorEmail = "doug@us.com" });
             _context.Blogs.Add(new Blog { Title = "Cats and kittens", Description = "All about cats and kittens", Slug = "cats-kittens", Saved = DateTime.Now, AuthorName = "Katty Jones", AuthorEmail = "katty@us.com" });
+            _context.Blogs.Add(new Blog { Title = "Dogs blog", Description = "Awesome blog about dogs", Slug = "dog-blog", Saved = DateTime.Now, AuthorName = "Doug Johnson", AuthorEmail = "doug@us.com" });
         }
 
         private void SeedCategories()
