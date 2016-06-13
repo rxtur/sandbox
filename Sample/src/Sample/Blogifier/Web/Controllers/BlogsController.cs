@@ -16,12 +16,17 @@ namespace Blogifier.Web.Controllers
         private BlogifierDbContext _context;
         IPostRepository _postDb;
         IBlogRepository _blogDb;
+        ICategoryRepository _catDb;
 
-        public BlogsController(BlogifierDbContext context, IPostRepository postsDb, IBlogRepository blogsDb)
+        public BlogsController(BlogifierDbContext context, 
+            IPostRepository postsDb, 
+            IBlogRepository blogsDb, 
+            ICategoryRepository catDb)
         {
             _context = context;
             _postDb = postsDb;
             _blogDb = blogsDb;
+            _catDb = catDb;
         }
 
         [Route("blogs/test")]
@@ -45,25 +50,27 @@ namespace Blogifier.Web.Controllers
             return View("~/Views/Blogifier/PostList.cshtml", posts);
         }
 
-        [Route("blogs/{tenant}")]
-        public IActionResult AuthorPosts(string tenant)
+        [Route("blogs/{blog}")]
+        public async Task<IActionResult> AuthorPosts(string blog)
         {
-            if (!TenantExists(tenant))
+            if (!TenantExists(blog))
                 return View("Error");
 
-            ViewBag.Title = "Posts by " + tenant;
-            ViewBag.Author = tenant;
-            return View("~/Views/Blogifier/AuthorPosts.cshtml");
+            ViewBag.Title = "Posts by " + blog;
+            ViewBag.Author = blog;
+            var posts = await _postDb.Find(p => p.Blog.Slug == blog, 1, 10);
+
+            return View("~/Views/Blogifier/AuthorPosts.cshtml", posts);
         }
 
-        [Route("blogs/{tenant}/{slug}")]
-        public async Task<IActionResult> SinglePost(string tenant, string slug)
+        [Route("blogs/{blog}/{slug}")]
+        public async Task<IActionResult> SinglePost(string blog, string slug)
         {
-            if (!TenantExists(tenant))
+            if (!TenantExists(blog))
                 return View("Error");
 
             ViewBag.Title = "Post " + slug;
-            var post = await _postDb.GetBySlug(slug);
+            var post = await _postDb.BySlug(slug);
             return View("~/Views/Blogifier/SinglePost.cshtml", post);
         }
 
@@ -71,15 +78,18 @@ namespace Blogifier.Web.Controllers
 
         #region Categories and tags
 
-        [Route("category/{tenant}/{name}")]
-        public IActionResult Category(string tenant, string name)
+        [Route("category/{blog}/{slug}")]
+        public async Task<IActionResult> Category(string blog, string slug)
         {
-            if (!TenantExists(tenant))
+            if (!TenantExists(blog))
                 return View("Error");
 
             ViewBag.Title = "Categories";
-            ViewBag.Category = name;
-            return View("~/Views/Blogifier/CategoryPosts.cshtml");
+            ViewBag.Category = slug;
+
+            var posts = await _postDb.ByCategory(slug, blog, 1, 10);
+
+            return View("~/Views/Blogifier/CategoryPosts.cshtml", posts);
         }
 
         [Route("tag/{tenant}/{name}")]
@@ -156,6 +166,5 @@ namespace Blogifier.Web.Controllers
             }
             return false;
         }
-
     }
 }

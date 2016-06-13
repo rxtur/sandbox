@@ -2,35 +2,27 @@
     var theme = "Standard";
     Layout = "~/Views/Blogifier/Themes/" + theme + "/_Layout.cshtml";
 }
-
-@if (ViewBag.Category == "cat-number-1")
+@foreach (var item in Model)
 {
     <div class="post">
         <header>
-            <h1><a href="/blogs/bob/test-number-two/">Test number two</a></h1>
+            <h1><a href="/blogs/@item.BlogSlug/@item.Slug/">@item.Title</a></h1>
             <div>
-                <span>March 29, 2016</span> |
-                <span><a href="/blogs/bob">Bob</a></span> |
-                <span><a href="/category/bob/cat-number-1">cat-number-1</a></span>
+                <span>@string.Format("{0:MMM d, yyyy}", item.Published)</span>
+                @foreach (var cat in item.Categories)
+                {
+                    <span>| <a href="/category/@item.BlogSlug/@cat.Slug">@cat.Title</a></span>
+                }
             </div>
         </header>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque pariatur voluptatem, facilis modi at obcaecati voluptates rem, sunt atque repellat officiis illum numquam dolorem ea consequuntur laborum nobis. Laudantium, suscipit.</p>
-        <p><a class="btn btn-primary btn-lg" href="/blogs/bob/test-number-two/" role="button">Learn more</a></p>
+        <p>@item.Content</p>
+        <p><a class="btn btn-primary btn-lg" href="/blogs/@item.BlogSlug/@item.Slug/" role="button">Learn more</a></p>
     </div>
 }
-@if (ViewBag.Category == "cat-number-2")
-{
-    <div class="post">
-        <header>
-            <h1><a href="/blogs/sam/test-number-one/">Test number one</a></h1>
-            <div>
-                <span>March 28, 2016</span> |
-                <span><a href="/blogs/sam">Sam</a></span> |
-                <span><a href="/category/sam/cat-number-2">cat-number-2</a></span>
-            </div>
-        </header>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque pariatur voluptatem, facilis modi at obcaecati voluptates rem, sunt atque repellat officiis illum numquam dolorem ea consequuntur laborum nobis. Laudantium, suscipit.</p>
-        <p><a class="btn btn-primary btn-lg" href="/blogs/sam/test-number-one/" role="button">Learn more</a></p>
-    </div>
-}
+<nav>
+    <ul class="pager">
+        <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
+        <li class="next"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
+    </ul>
+</nav>
 @await Html.PartialAsync("~/Views/Blogifier/Themes/Standard/Subfooter.cshtml")

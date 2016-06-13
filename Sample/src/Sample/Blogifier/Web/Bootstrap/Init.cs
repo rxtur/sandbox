@@ -11,10 +11,11 @@ namespace Blogifier.Web.Bootstrap
         public static void Configure(IServiceCollection services)
         {
             services.AddSingleton<IPostRepository, PostRepository>();
-            services.AddSingleton<IBlogRepository, BlogRepository> ();
+            services.AddSingleton<IBlogRepository, BlogRepository>();
+            services.AddSingleton<ICategoryRepository, CategoryRepository>();
 
-            var connection = @"Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true";
-            services.AddDbContext<BlogifierDbContext>(options => options.UseSqlServer(connection));
+            var conn = @"Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true";
+            services.AddDbContext<BlogifierDbContext>(options => options.UseSqlServer(conn));
         }
     }
 }
