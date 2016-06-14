@@ -1,4 +1,5 @@
-﻿using Blogifier.Core.Models;
+﻿using Blogifier.Core.Infrastructure;
+using Blogifier.Core.Models;
 using Blogifier.Core.Repositories;
 using Blogifier.Core.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,18 @@ namespace Blogifier.Web.Bootstrap
             services.AddSingleton<IBlogRepository, BlogRepository>();
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
 
-            var conn = @"Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true";
-            //services.AddDbContext<BlogifierDbContext>(options => options.UseSqlServer(conn));
-            services.AddDbContext<BlogifierDbContext>(options => options.UseInMemoryDatabase());
+            AppSettings.UseInMemoryDb = true;
+
+            AppSettings.ConnectionString = @"Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true";
+
+            if (AppSettings.UseInMemoryDb)
+            {
+                services.AddDbContext<BlogifierDbContext>(options => options.UseInMemoryDatabase());
+            }
+            else
+            {
+                services.AddDbContext<BlogifierDbContext>(options => options.UseSqlServer(AppSettings.ConnectionString));
+            }           
         }
     }
 }

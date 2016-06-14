@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Blogifier.Core.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blogifier.Core.Models
 {
@@ -6,6 +7,7 @@ namespace Blogifier.Core.Models
     {
         public BlogifierDbContext(DbContextOptions<BlogifierDbContext> options) : base(options) { }
 
+        #region Tables
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<BlogMeta> BlogMetas { get; set; }
         public DbSet<Post> Posts { get; set; }
@@ -14,11 +16,18 @@ namespace Blogifier.Core.Models
         public DbSet<CategoryMeta> CategoryMetas { get; set; }
         public DbSet<PostCategory> PostCategories { get; set; }
         public DbSet<Asset> Assets { get; set; }
+        #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true");
-            optionsBuilder.UseInMemoryDatabase();
+            if (AppSettings.UseInMemoryDb)
+            {
+                optionsBuilder.UseInMemoryDatabase();
+            }
+            else
+            {
+                optionsBuilder.UseSqlServer(AppSettings.ConnectionString);
+            }           
             base.OnConfiguring(optionsBuilder);
         }
 
