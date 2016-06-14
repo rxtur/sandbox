@@ -436,6 +436,18 @@
           "lib/netstandard1.3/Microsoft.EntityFrameworkCore.dll": {}
         }
       },
+      "Microsoft.EntityFrameworkCore.InMemory/1.0.0-rc2-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "1.0.0-rc2-final"
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.EntityFrameworkCore.InMemory.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.EntityFrameworkCore.InMemory.dll": {}
+        }
+      },
       "Microsoft.EntityFrameworkCore.Relational/1.0.0-rc2-final": {
         "type": "package",
         "dependencies": {
@@ -3138,6 +3150,18 @@
         "lib/netcore50/Microsoft.EntityFrameworkCore.xml",
         "lib/netstandard1.3/Microsoft.EntityFrameworkCore.dll",
         "lib/netstandard1.3/Microsoft.EntityFrameworkCore.xml"
+      ]
+    },
+    "Microsoft.EntityFrameworkCore.InMemory/1.0.0-rc2-final": {
+      "sha512": "dNx+TrLTM5VlKUevS0J36L4DTaN14V3GEWlSU9y7+OnAfsz4Eq3rokR2zLm5N9VhOU3Pbqgygj45uOuqcJQgtw==",
+      "type": "package",
+      "files": [
+        "Microsoft.EntityFrameworkCore.InMemory.1.0.0-rc2-final.nupkg.sha512",
+        "Microsoft.EntityFrameworkCore.InMemory.nuspec",
+        "lib/net451/Microsoft.EntityFrameworkCore.InMemory.dll",
+        "lib/net451/Microsoft.EntityFrameworkCore.InMemory.xml",
+        "lib/netstandard1.3/Microsoft.EntityFrameworkCore.InMemory.dll",
+        "lib/netstandard1.3/Microsoft.EntityFrameworkCore.InMemory.xml"
       ]
     },
     "Microsoft.EntityFrameworkCore.Relational/1.0.0-rc2-final": {
@@ -8027,6 +8051,7 @@
       "Microsoft.AspNetCore.Http.Abstractions >= 1.0.0-rc2-final",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 1.0.0-rc2-final",
       "Microsoft.AspNetCore.Routing >= 1.0.0-rc2-final",
+      "Microsoft.EntityFrameworkCore.InMemory >= 1.0.0-rc2-final",
       "Microsoft.EntityFrameworkCore.SqlServer >= 1.0.0-rc2-final",
       "Microsoft.NETCore.App >= 1.0.0-rc2-3002702",
       "NETStandard.Library >= 1.5.0-rc2-24027"

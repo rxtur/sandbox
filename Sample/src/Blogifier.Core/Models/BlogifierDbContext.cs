@@ -17,7 +17,8 @@ namespace Blogifier.Core.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true");
+            //optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true");
+            optionsBuilder.UseInMemoryDatabase();
             base.OnConfiguring(optionsBuilder);
         }
 

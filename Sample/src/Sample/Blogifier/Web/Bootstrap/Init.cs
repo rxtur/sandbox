@@ -15,7 +15,8 @@ namespace Blogifier.Web.Bootstrap
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
 
             var conn = @"Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true";
-            services.AddDbContext<BlogifierDbContext>(options => options.UseSqlServer(conn));
+            //services.AddDbContext<BlogifierDbContext>(options => options.UseSqlServer(conn));
+            services.AddDbContext<BlogifierDbContext>(options => options.UseInMemoryDatabase());
         }
     }
 }
