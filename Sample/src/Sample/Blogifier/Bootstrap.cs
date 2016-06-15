@@ -5,9 +5,9 @@ using Blogifier.Core.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Blogifier.Web.Bootstrap
+namespace Blogifier
 {
-    public class Init
+    public class Bootstrap
     {
         public static void Configure(IServiceCollection services)
         {
@@ -15,7 +15,7 @@ namespace Blogifier.Web.Bootstrap
             services.AddSingleton<IBlogRepository, BlogRepository>();
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
 
-            AppSettings.UseInMemoryDb = true;
+            AppSettings.UseInMemoryDb = false;
             AppSettings.InitializeData = true;
 
             AppSettings.ConnectionString = "Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true";
@@ -33,7 +33,7 @@ namespace Blogifier.Web.Bootstrap
             {
                 var setup = new Setup();
                 setup.SeedData();
-            }  
+            }
         }
     }
 }

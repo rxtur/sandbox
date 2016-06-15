@@ -26,7 +26,6 @@ namespace Blogifier.Core.Models
             {
                 optionsBuilder.UseSqlServer(AppSettings.ConnectionString);
             }
-            //base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,8 +38,6 @@ namespace Blogifier.Core.Models
             modelBuilder.Entity<CategoryMeta>().ForSqlServerToTable("bf_categorymetas");
             modelBuilder.Entity<PostCategory>().ForSqlServerToTable("bf_postcategories");
             modelBuilder.Entity<Asset>().ForSqlServerToTable("bf_assets");
-
-            //base.OnModelCreating(modelBuilder);
         }
     }
 }
