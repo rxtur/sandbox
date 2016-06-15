@@ -16,8 +16,9 @@ namespace Blogifier.Web.Bootstrap
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
 
             AppSettings.UseInMemoryDb = true;
+            AppSettings.InitializeData = true;
 
-            AppSettings.ConnectionString = @"Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true";
+            AppSettings.ConnectionString = "Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true";
 
             if (AppSettings.UseInMemoryDb)
             {
@@ -26,7 +27,13 @@ namespace Blogifier.Web.Bootstrap
             else
             {
                 services.AddDbContext<BlogifierDbContext>(options => options.UseSqlServer(AppSettings.ConnectionString));
-            }           
+            }
+
+            if (AppSettings.InitializeData)
+            {
+                var setup = new Setup();
+                setup.SeedData();
+            }  
         }
     }
 }

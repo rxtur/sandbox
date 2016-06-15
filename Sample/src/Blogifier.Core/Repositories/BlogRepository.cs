@@ -16,6 +16,11 @@ namespace Blogifier.Core.Repositories
             _db = db;
         }
 
+        public bool BlogExists(string slug)
+        {
+            return _db.Blogs.Select(b => b.Slug == slug).ToList().Count > 0;
+        }
+
         public List<string> BlogsLookup()
         {
             return _db.Blogs.Select(b => b.Slug).ToList();

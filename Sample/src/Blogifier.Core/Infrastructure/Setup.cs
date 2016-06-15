@@ -7,9 +7,9 @@ namespace Blogifier.Core.Infrastructure
     {
         private BlogifierDbContext _context;
 
-        public Setup(BlogifierDbContext context)
+        public Setup()
         {
-            _context = context;
+            _context = new BlogifierDbContext();
         }
 
         public void SeedData()

@@ -5,9 +5,7 @@ namespace Blogifier.Core.Models
 {
     public class BlogifierDbContext : DbContext
     {
-        public BlogifierDbContext(DbContextOptions<BlogifierDbContext> options) : base(options) { }
-
-        #region Tables
+        #region DB Sets
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<BlogMeta> BlogMetas { get; set; }
         public DbSet<Post> Posts { get; set; }
@@ -27,8 +25,8 @@ namespace Blogifier.Core.Models
             else
             {
                 optionsBuilder.UseSqlServer(AppSettings.ConnectionString);
-            }           
-            base.OnConfiguring(optionsBuilder);
+            }
+            //base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,7 +40,7 @@ namespace Blogifier.Core.Models
             modelBuilder.Entity<PostCategory>().ForSqlServerToTable("bf_postcategories");
             modelBuilder.Entity<Asset>().ForSqlServerToTable("bf_assets");
 
-            base.OnModelCreating(modelBuilder);
+            //base.OnModelCreating(modelBuilder);
         }
     }
 }
