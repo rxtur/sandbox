@@ -15,9 +15,10 @@ namespace Blogifier
             services.AddSingleton<IBlogRepository, BlogRepository>();
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
 
-            AppSettings.UseInMemoryDb = false;
+            AppSettings.UseInMemoryDb = true;
             AppSettings.InitializeData = true;
 
+            AppSettings.ItemsPerPage = 2;
             AppSettings.ConnectionString = "Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true";
 
             if (AppSettings.UseInMemoryDb)

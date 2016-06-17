@@ -98,6 +98,16 @@ namespace Blogifier.Core.Infrastructure
                 Title = "Post about persian cats",
                 Description = "This is the post about persian cats. Cumque pariatur voluptatem, facilis modi at obcaecati voluptates rem, sunt atque repellat officiis illum numquam dolorem ea consequuntur laborum nobis.",
                 Content = "This is the post about persian cats. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque pariatur voluptatem, facilis modi at obcaecati voluptates rem, sunt atque repellat officiis illum numquam dolorem ea consequuntur laborum nobis. Laudantium, suscipit.",
+                Saved = DateTime.Now.AddDays(-8),
+                Published = DateTime.Now.AddDays(-8)
+            });
+            _context.Posts.Add(new Post
+            {
+                BlogId = 1,
+                Slug = "another-post-about-persian-cats",
+                Title = "Another post about persian cats",
+                Description = "This is another post about persian cats. Cumque pariatur voluptatem, facilis modi at obcaecati voluptates rem, sunt atque repellat officiis illum numquam dolorem ea consequuntur laborum nobis.",
+                Content = "This is another post about persian cats. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque pariatur voluptatem, facilis modi at obcaecati voluptates rem, sunt atque repellat officiis illum numquam dolorem ea consequuntur laborum nobis. Laudantium, suscipit.",
                 Saved = DateTime.Now.AddDays(-5),
                 Published = DateTime.Now.AddDays(-5)
             });
@@ -107,12 +117,14 @@ namespace Blogifier.Core.Infrastructure
         {
             _context.PostCategories.Add(new PostCategory { CategoryId = 1, PostId = 1 });
             _context.PostCategories.Add(new PostCategory { CategoryId = 3, PostId = 2 });
+            _context.PostCategories.Add(new PostCategory { CategoryId = 3, PostId = 3 });
+            _context.PostCategories.Add(new PostCategory { CategoryId = 3, PostId = 5 });
             _context.PostCategories.Add(new PostCategory { CategoryId = 4, PostId = 3 });
             _context.PostCategories.Add(new PostCategory { CategoryId = 4, PostId = 4 });
-            _context.PostCategories.Add(new PostCategory { CategoryId = 3, PostId = 5 });
             _context.PostCategories.Add(new PostCategory { CategoryId = 5, PostId = 5 });
             _context.PostCategories.Add(new PostCategory { CategoryId = 6, PostId = 6 });
             _context.PostCategories.Add(new PostCategory { CategoryId = 7, PostId = 6 });
+            _context.PostCategories.Add(new PostCategory { CategoryId = 7, PostId = 7 });
         }
 
     }

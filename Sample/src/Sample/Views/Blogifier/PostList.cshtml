@@ -1,28 +1,16 @@
-﻿@{
+﻿@model Blogifier.Core.ViewModels.PostList
+@{
     var theme = "Standard";
     Layout = "~/Views/Blogifier/Themes/" + theme + "/_Layout.cshtml";
+
+    var olderUrl = string.Format("/blogs/page/{0}", Model.Pager.OlderPage);
+    var newerUrl = Model.CurrentPage < 3 ? "/blogs" : string.Format("/blogs/page/{0}", Model.Pager.NewerPage);
 }
-@foreach (var item in Model)
-{
-    <div class="post">
-        <header>
-            <h1><a href="/blogs/@item.BlogSlug/@item.Slug/">@item.Title</a></h1>
-            <div>
-                <span>@string.Format("{0:MMM d, yyyy}", item.Published)</span>
-                @foreach (var cat in item.Categories)
-                {
-                <span>| <a href="/category/@item.BlogSlug/@cat.Slug">@cat.Title</a></span>
-                }
-            </div>
-        </header>
-        <p>@item.Content</p>
-        <p><a class="btn btn-primary btn-lg" href="/blogs/@item.BlogSlug/@item.Slug/" role="button">Learn more</a></p>
-    </div>
-}
+@Html.Partial("~/Views/Blogifier/PostLoop.cshtml", Model)
 <nav>
     <ul class="pager">
-        <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
-        <li class="next"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
+        <li class="@Model.Pager.NewerCss"><a href="@newerUrl"><span aria-hidden="true">&larr;</span> Newer</a></li>
+        <li class="@Model.Pager.OlderCss"><a href="@olderUrl">Older <span aria-hidden="true">&rarr;</span></a></li>
     </ul>
 </nav>
 @await Html.PartialAsync("~/Views/Blogifier/Themes/Standard/Subfooter.cshtml")

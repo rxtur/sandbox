@@ -7,5 +7,6 @@
         public static string ConnectionString { get; set; }
         public static string Title { get; set; }
         public static string Description { get; set; }
+        public static int ItemsPerPage { get; set; }
     }
 }

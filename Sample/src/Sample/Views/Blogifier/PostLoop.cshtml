@@ -1,0 +1,18 @@
+﻿@model Blogifier.Core.ViewModels.PostList
+@foreach (var item in Model.Posts)
+{
+<div class="post">
+    <header>
+        <h1><a href="/blogs/@item.BlogSlug/@item.Slug/">@item.Title</a></h1>
+        <div>
+            <span>@string.Format("{0:MMM d, yyyy}", item.Published)</span>
+            @foreach (var cat in item.Categories)
+            {
+            <span>| <a href="/category/@item.BlogSlug/@cat.Slug">@cat.Title</a></span>
+            }
+        </div>
+    </header>
+    <p>@item.Content</p>
+    <p><a class="btn btn-primary btn-lg" href="/blogs/@item.BlogSlug/@item.Slug/" role="button">Learn more</a></p>
+</div>
+}

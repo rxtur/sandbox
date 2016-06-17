@@ -18,45 +18,35 @@ namespace Blogifier.Core.Repositories
             _db = db;
         }
 
-        public async Task<List<PostItem>> All()
-        {
-            var postList = _db.Posts.AsNoTracking().OrderByDescending(p => p.Published)
-                .Include(p => p.PostCategories).Include(p => p.Blog).ToList();
-
-            var posts = GetItems(postList);
-
-            return await Task.Run(() => posts);
-        }
-
-        public async Task<List<PostItem>> Find(Expression<Func<Post, bool>> predicate, int page = 1, int pageSize = 10)
+        public async Task<PostList> Find(Expression<Func<Post, bool>> predicate, int page = 1, int pageSize = 10)
         {
             var skip = page * pageSize - pageSize;
+            var pagedList = new PostList(page, pageSize);
 
-            var postList = _db.Posts.AsNoTracking().Where(predicate).OrderByDescending(p => p.Published)
+            var posts = _db.Posts.AsNoTracking().Where(predicate).OrderByDescending(p => p.Published)
                 .Include(p => p.PostCategories).Include(p => p.Blog).ToList();
 
-            List<PostItem> posts;
+            pagedList.TotalCnt = posts.Count;
+
             if(skip == 0)
-                posts = GetItems(postList).Take(pageSize).ToList();
+                pagedList.Posts = GetItems(posts).Take(pageSize).ToList();
             else
-                posts = GetItems(postList).Skip(skip).Take(pageSize).ToList();
+                pagedList.Posts = GetItems(posts).Skip(skip).Take(pageSize).ToList();
 
-            return await Task.Run(() => posts);
+            return await Task.Run(() => pagedList);
         }
 
-        public async Task<Post> BySlug(string slug)
-        {
-            return await _db.Posts.AsNoTracking().Include(p => p.Blog).FirstOrDefaultAsync(p => p.Slug == slug);
-        }
-
-        public async Task<List<PostItem>> ByCategory(string slug, string blog = "all", int page = 1, int pageSize = 10)
+        public async Task<PostList> ByCategory(string slug, string blog = "all", int page = 1, int pageSize = 10)
         {
             var skip = page * pageSize - pageSize;
-            var cat = _db.Categories.Where(c => c.Slug == slug).FirstOrDefault();
-            var posts = blog == "all" ? _db.Posts.AsNoTracking().Include(p => p.Blog).Include(p => p.PostCategories) :
-                _db.Posts.AsNoTracking().Include(p => p.Blog).Include(p => p.PostCategories);
+            var pagedList = new PostList(page, pageSize);
 
-            var tmpPosts = new List<Post>();
+            var cat = _db.Categories.Where(c => c.Slug == slug).FirstOrDefault();
+            var posts = blog == "all" ? 
+                _db.Posts.AsNoTracking().Include(p => p.Blog).Include(p => p.PostCategories).ToList() :
+                _db.Posts.AsNoTracking().Include(p => p.Blog).Include(p => p.PostCategories).Where(p => p.Blog.Slug == blog).ToList();
+
+            var categorized = new List<Post>();
             if (cat != null)
             {
                 foreach (var p in posts)
@@ -65,19 +55,25 @@ namespace Blogifier.Core.Repositories
                     {
                         if (c.CategoryId == cat.CategoryId)
                         {
-                            tmpPosts.Add(p);
+                            categorized.Add(p);
                             break;
                         }
                     }
                 }
             }
-            List<PostItem> catPosts;
-            if (skip == 0)
-                catPosts = GetItems(tmpPosts).Take(pageSize).ToList();
-            else
-                catPosts = GetItems(tmpPosts).Skip(skip).Take(pageSize).ToList();
+            pagedList.TotalCnt = categorized.Count;
 
-            return await Task.Run(() => catPosts);
+            if (skip == 0)
+                pagedList.Posts = GetItems(categorized).Take(pageSize).ToList();
+            else
+                pagedList.Posts = GetItems(categorized).Skip(skip).Take(pageSize).ToList();
+
+            return await Task.Run(() => pagedList);
+        }
+
+        public async Task<Post> BySlug(string slug)
+        {
+            return await _db.Posts.AsNoTracking().Include(p => p.Blog).FirstOrDefaultAsync(p => p.Slug == slug);
         }
 
         private List<PostItem> GetItems(List<Post> postList)
