@@ -2,11 +2,11 @@
 using Blogifier.Core.Repositories.Interfaces;
 using Blogifier.Core.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System;
 
 namespace Blogifier.Core.Repositories
 {
@@ -71,39 +71,59 @@ namespace Blogifier.Core.Repositories
             return await Task.Run(() => pagedList);
         }
 
-        public async Task<Post> BySlug(string slug)
+        public PostDetail BySlug(string slug)
         {
-            return await _db.Posts.AsNoTracking().Include(p => p.Blog).FirstOrDefaultAsync(p => p.Slug == slug);
+            var item = new PostDetail();
+            item.Post = _db.Posts.AsNoTracking()
+                .Include(p => p.Blog)
+                .Include(p => p.PostCategories)
+                .FirstOrDefault(p => p.Slug == slug);
+
+            item.Categories = GetCategories(item.Post);
+            return item;
         }
 
-        private List<PostItem> GetItems(List<Post> postList)
+        #region Methods
+        private List<PostListItem> GetItems(List<Post> postList)
         {
-            var posts = new List<PostItem>();
+            var posts = new List<PostListItem>();
             foreach (var p in postList)
             {
-                var item = new PostItem
-                {
-                    Slug = p.Slug,
-                    Title = p.Title,
-                    Content = p.Content,
-                    Published = p.Published,
-                    AuthorName = p.Blog.AuthorName,
-                    BlogSlug = p.Blog.Slug,
-                    AuthorEmail = p.Blog.AuthorEmail,
-                    Categories = new List<CategoryItem>()
-                };
-                if (p.PostCategories != null && p.PostCategories.Count > 0)
-                {
-                    foreach (var pc in p.PostCategories)
-                    {
-                        var cat = _db.Categories.AsNoTracking().Where(c => c.CategoryId == pc.CategoryId).FirstOrDefault();
-                        var catItem = new CategoryItem { Slug = cat.Slug, Title = cat.Title };
-                        item.Categories.Add(catItem);
-                    }
-                }
-                posts.Add(item);
+                posts.Add(GetItem(p));
             }
             return posts;
         }
+
+        private PostListItem GetItem(Post post)
+        {
+            var item = new PostListItem
+            {
+                Slug = post.Slug,
+                Title = post.Title,
+                Content = post.Content,
+                Published = post.Published,
+                AuthorName = post.Blog.AuthorName,
+                BlogSlug = post.Blog.Slug,
+                AuthorEmail = post.Blog.AuthorEmail,
+                Categories = new List<CategoryListItem>()
+            };
+            item.Categories = GetCategories(post);
+            return item;
+        }
+
+        private List<CategoryListItem> GetCategories(Post post)
+        {
+            var catList = new List<CategoryListItem>();
+            if (post.PostCategories != null && post.PostCategories.Count > 0)
+            {
+                foreach (var pc in post.PostCategories)
+                {
+                    var cat = _db.Categories.AsNoTracking().Where(c => c.CategoryId == pc.CategoryId).FirstOrDefault();
+                    catList.Add(new CategoryListItem { CategoryId = cat.CategoryId, Slug = cat.Slug, Title = cat.Title });
+                }
+            }
+            return catList;   
+        }
+        #endregion
     }
 }

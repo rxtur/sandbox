@@ -1,11 +1,12 @@
-﻿@{
+﻿@model Blogifier.Core.ViewModels.PostDetail
+@{
     var theme = "Standard";
     Layout = "~/Views/Blogifier/Themes/" + theme + "/_Layout.cshtml";
 }
 <div class="blog-post">
-    <h2 class="blog-post-title">@Model.Title</h2>
-    <p class="blog-post-meta">@string.Format("{0:MMM d, yyyy}", Model.Published) by <a href="/blogs/@Model.Blog.Slug">@Model.Blog.AuthorName</a></p>
-    @Model.Content
+    <h2 class="blog-post-title">@Model.Post.Title</h2>
+    <p class="blog-post-meta">@string.Format("{0:MMM d, yyyy}", Model.Post.Published) by <a href="/blogs/@Model.Post.Blog.Slug">@Model.Post.Blog.AuthorName</a></p>
+    @Model.Post.Content
 </div>
 <form role="form">
     <div class="form-group">

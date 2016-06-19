@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Blogifier.Core.ViewModels
 {
-    public class PostItem
+    public class PostListItem
     {
         public string Slug { get; set; }
         public string Title { get; set; }
@@ -14,6 +14,6 @@ namespace Blogifier.Core.ViewModels
         public string AuthorName { get; set; }
         public string AuthorEmail { get; set; }
 
-        public ICollection<CategoryItem> Categories { get; set; }
+        public ICollection<CategoryListItem> Categories { get; set; }
     }
 }

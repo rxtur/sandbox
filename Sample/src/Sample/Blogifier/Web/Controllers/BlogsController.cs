@@ -69,14 +69,14 @@ namespace Blogifier.Web.Controllers
         }
 
         [Route("blogs/{blog}/{slug}")]
-        public async Task<IActionResult> SinglePost(string blog, string slug)
+        public IActionResult SinglePost(string blog, string slug)
         {
             if (!BlogExists(blog))
                 return View("Error");
 
             ViewBag.Title = "Post " + slug;
-            var post = await _postDb.BySlug(slug);
-            return View("~/Views/Blogifier/SinglePost.cshtml", post);
+            var item = _postDb.BySlug(slug);
+            return View("~/Views/Blogifier/SinglePost.cshtml", item);
         }
 
         [Route("category/{blog}/{slug}")]

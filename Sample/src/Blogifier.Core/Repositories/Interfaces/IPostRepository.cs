@@ -10,6 +10,6 @@ namespace Blogifier.Core.Repositories.Interfaces
     {
         Task<PostList> Find(Expression<Func<Post, bool>> predicate, int page = 1, int pageSize = 10);
         Task<PostList> ByCategory(string slug, string blog = "all", int page = 1, int pageSize = 10);
-        Task<Post> BySlug(string slug);
+        PostDetail BySlug(string slug);
     }
 }

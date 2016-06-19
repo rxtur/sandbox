@@ -1,0 +1,34 @@
+﻿@model Blogifier.Core.ViewModels.PostList
+@{
+    var theme = "Bootstrap";
+    Layout = "~/Views/Blogifier/Admin/Themes/" + theme + "/_Layout.cshtml";
+
+    var olderUrl = string.Format("/admin/{0}/page/{1}", ViewBag.BlogSlug,  Model.Pager.OlderPage);
+    var newerUrl = Model.CurrentPage < 3 ? 
+        string.Format("/admin/{0}", ViewBag.BlogSlug) : 
+        string.Format("/admin/{0}/page/{1}", ViewBag.BlogSlug, Model.Pager.NewerPage);
+}
+@foreach (var item in Model.Posts)
+{
+    <div class="post">
+        <header>
+            <h1><a href="/blogs/@item.BlogSlug/@item.Slug/">@item.Title</a></h1>
+            <div>
+                <span>@string.Format("{0:MMM d, yyyy}", item.Published)</span>
+                @foreach (var cat in item.Categories)
+                {
+                    <span>| <a href="/category/@item.BlogSlug/@cat.Slug">@cat.Title</a></span>
+                }
+            </div>
+        </header>
+        <p>@item.Content</p>
+        <p><a class="btn btn-primary btn-lg" href="/admin/@item.BlogSlug/@item.Slug/" role="button">Edit</a></p>
+    </div>
+}
+<nav>
+    <ul class="pager">
+        <li class="@Model.Pager.NewerCss"><a href="@newerUrl"><span aria-hidden="true">&larr;</span> Newer</a></li>
+        <li class="@Model.Pager.OlderCss"><a href="@olderUrl">Older <span aria-hidden="true">&rarr;</span></a></li>
+    </ul>
+</nav>
+@await Html.PartialAsync("~/Views/Blogifier/Themes/Standard/Subfooter.cshtml")
