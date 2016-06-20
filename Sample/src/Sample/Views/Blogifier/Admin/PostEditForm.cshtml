@@ -4,8 +4,8 @@
     <textarea id="mytextarea">@Model.Post.Content</textarea>
     <p style="margin-top: 10px">
         <button class="btn btn-success btn-lg" type="submit" onclick="submitPost()">Save</button>
-        <a class="btn btn-warning" href="#" role="button">Publish</a>
-        <a class="btn btn-danger" href="#" role="button">Delete</a>
+        @*<a class="btn btn-warning" href="#" role="button">Publish</a>*@
+        <a class="btn btn-danger" href="/admin/@Model.Post.Blog.Slug/delete/@Model.Post.PostId" role="button">Delete</a>
         <a class="btn btn-default" href="/admin/@Model.Post.Blog.Slug" role="button">Cancel</a>
     </p>
 

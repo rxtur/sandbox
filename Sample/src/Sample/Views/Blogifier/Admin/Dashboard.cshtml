@@ -21,8 +21,11 @@
                 }
             </div>
         </header>
-        <p>@item.Content</p>
-        <p><a class="btn btn-primary btn-lg" href="/admin/@item.BlogSlug/@item.Slug/" role="button">Edit</a></p>
+        <p>@Html.Raw(item.Content)</p>
+        <p>
+            <a class="btn btn-primary btn-lg" href="/admin/@item.BlogSlug/@item.Slug/" role="button">Edit</a>
+            <a class="btn btn-danger" href="/admin/@item.BlogSlug/delete/@item.PostId" role="button">Delete</a>
+        </p>
     </div>
 }
 <nav>

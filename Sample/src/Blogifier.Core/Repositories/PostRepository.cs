@@ -83,20 +83,25 @@ namespace Blogifier.Core.Repositories
             return item;
         }
 
-        public async Task Add(Post item)
+        public async Task<Post> Add(Post item)
         {
             item.Saved = DateTime.UtcNow;
-
-            //TODO: temp handling
             item.Published = DateTime.UtcNow;
-            item.Slug = item.Title.Replace(" ", "-").ToLower();
+            item.Slug = SlugFromTitle(item.Title);
             item.Description = item.Content;
 
             _db.Posts.Add(item);
             await _db.SaveChangesAsync();
+
+            var post = _db.Posts.Where(p => p.Slug == item.Slug).FirstOrDefault();
+            if (item.PostCategories == null || item.PostCategories.Count == 0)
+            {
+                SaveUncategorized(post);
+            }
+            return post;
         }
 
-        public async Task Update(Post item)
+        public async Task<Post> Update(Post item)
         {
             var itemToUpdate = await _db.Posts.FirstOrDefaultAsync(i => i.PostId == item.PostId);
 
@@ -106,6 +111,12 @@ namespace Blogifier.Core.Repositories
 
             _db.Posts.Update(itemToUpdate);
             await _db.SaveChangesAsync();
+
+            if (item.PostCategories == null || item.PostCategories.Count == 0)
+            {
+                SaveUncategorized(itemToUpdate);
+            }
+            return itemToUpdate;
         }
 
         public async Task Delete(int id)
@@ -116,6 +127,7 @@ namespace Blogifier.Core.Repositories
         }
 
         #region Methods
+
         private List<PostListItem> GetItems(List<Post> postList)
         {
             var posts = new List<PostListItem>();
@@ -130,6 +142,7 @@ namespace Blogifier.Core.Repositories
         {
             var item = new PostListItem
             {
+                PostId = post.PostId,
                 Slug = post.Slug,
                 Title = post.Title,
                 Content = post.Content,
@@ -156,6 +169,30 @@ namespace Blogifier.Core.Repositories
             }
             return catList;   
         }
+        
+        private async void SaveUncategorized(Post post)
+        {
+            var category = _db.Categories.Where(c => c.Slug == "uncategorized").FirstOrDefault();
+            _db.PostCategories.Add(new PostCategory { PostId = post.PostId, CategoryId = category.CategoryId });
+            await _db.SaveChangesAsync();
+        }
+
+        private string SlugFromTitle(string title)
+        {
+            var slug = Infrastructure.Utility.SlugFromTitle(title);
+            if(_db.Posts.AsNoTracking().Where(p => p.Slug == slug).FirstOrDefault() != null)
+            {
+                for (int i = 2; i < 100; i++)
+                {
+                    if(_db.Posts.AsNoTracking().Where(p => p.Slug == slug + i.ToString()).FirstOrDefault() == null)
+                    {
+                        return slug + i.ToString();
+                    }
+                }
+            }
+            return slug;
+        }
+
         #endregion
     }
 }

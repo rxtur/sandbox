@@ -87,16 +87,26 @@ namespace Blogifier.Web.Controllers
         [Route("admin/{blog}/{slug}/save")]
         public async Task<ActionResult> PostSave(PostDetail model, string blog, string slug)
         {
+            Core.Models.Post post;
             if(model.Post.PostId > 0)
             {
-                await _postDb.Update(model.Post);
+                post = await _postDb.Update(model.Post);
             }
             else
             {
-                await _postDb.Add(model.Post);
+                post = await _postDb.Add(model.Post);
             }
-            var item = _postDb.BySlug(slug);
-            return View("~/Views/Blogifier/Admin/Editor.cshtml", item);
+            var url = string.Format("~/admin/{0}/{1}", blog, post.Slug);
+            return Redirect(url);
+        }
+
+        [Route("admin/{blog}/delete/{id}")]
+        public async Task<ActionResult> PostDelete(string blog, int id)
+        {
+            await _postDb.Delete(id);
+
+            var url = string.Format("~/admin/{0}", blog);
+            return Redirect(url);
         }
 
         private bool BlogExists(string slug)

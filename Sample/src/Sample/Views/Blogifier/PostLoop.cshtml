@@ -12,7 +12,7 @@
             }
         </div>
     </header>
-    <p>@item.Content</p>
+    <p>@Html.Raw(item.Content)</p>
     <p><a class="btn btn-primary btn-lg" href="/blogs/@item.BlogSlug/@item.Slug/" role="button">Learn more</a></p>
 </div>
 }
