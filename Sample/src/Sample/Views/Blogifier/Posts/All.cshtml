@@ -3,12 +3,12 @@
     var theme = "Standard";
     Layout = "~/Views/Blogifier/Themes/" + theme + "/_Layout.cshtml";
 
-    var olderUrl = string.Format("/category/{0}/{1}/page/{2}", ViewBag.BlogSlug, ViewBag.Category, Model.Pager.OlderPage);
-    var newerUrl = Model.CurrentPage < 3 ?
-        string.Format("/category/{0}/{1}", ViewBag.BlogSlug, ViewBag.Category) :
-        string.Format("/category/{0}/{1}/page/{2}", ViewBag.BlogSlug, ViewBag.Category, Model.Pager.NewerPage);
+    var olderUrl = string.Format("/{0}/page/{1}", Blogifier.Constants.Blogs, Model.Pager.OlderPage);
+    var newerUrl = Model.CurrentPage < 3 ? 
+        string.Format("/{0}", Blogifier.Constants.Blogs) : 
+        string.Format("/{0}/page/{1}", Blogifier.Constants.Blogs, Model.Pager.NewerPage);
 }
-@Html.Partial("~/Views/Blogifier/PostLoop.cshtml", Model)
+@Html.Partial("~/Views/Blogifier/Posts/Loop.cshtml", Model)
 <nav>
     <ul class="pager">
         <li class="@Model.Pager.NewerCss"><a href="@newerUrl"><span aria-hidden="true">&larr;</span> Newer</a></li>

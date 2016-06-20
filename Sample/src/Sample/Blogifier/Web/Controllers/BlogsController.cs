@@ -5,28 +5,26 @@ using System.Threading.Tasks;
 
 namespace Blogifier.Web.Controllers
 {
+    [Route("blogs")]
     public class BlogsController : Controller
     {
         IPostRepository _postDb;
         IBlogRepository _blogDb;
-        ICategoryRepository _catDb;
 
-        public BlogsController(IPostRepository postsDb, IBlogRepository blogsDb, ICategoryRepository catDb)
+        public BlogsController(IPostRepository postsDb, IBlogRepository blogsDb)
         {
             _postDb = postsDb;
             _blogDb = blogsDb;
-            _catDb = catDb;
         }
 
-        [Route("blogs")]
         public async Task<IActionResult> Index()
         {
             ViewBag.Title = "All posts";
             var pagedList = await _postDb.Find(p => p.PostId > 0, 1, AppSettings.ItemsPerPage);
-            return View("~/Views/Blogifier/PostList.cshtml", pagedList);
+            return View("~/Views/Blogifier/Posts/All.cshtml", pagedList);
         }
 
-        [Route("blogs/page/{page}")]
+        [Route("page/{page}")]
         public async Task<IActionResult> AllPaged(int page)
         {
             ViewBag.Title = "All posts";
@@ -35,10 +33,10 @@ namespace Blogifier.Web.Controllers
             if (pagedList.Pager.RedirectToError)
                 return View("Error");
 
-            return View("~/Views/Blogifier/PostList.cshtml", pagedList);
+            return View("~/Views/Blogifier/Posts/All.cshtml", pagedList);
         }
 
-        [Route("blogs/{blog}")]
+        [Route("{blog}")]
         public async Task<IActionResult> AuthorPosts(string blog)
         {
             if (!BlogExists(blog))
@@ -48,10 +46,10 @@ namespace Blogifier.Web.Controllers
             ViewBag.BlogSlug = blog;
 
             var pagedList = await _postDb.Find(p => p.Blog.Slug == blog, 1, AppSettings.ItemsPerPage);
-            return View("~/Views/Blogifier/AuthorPosts.cshtml", pagedList);
+            return View("~/Views/Blogifier/Posts/ByBlog.cshtml", pagedList);
         }
 
-        [Route("blogs/{blog}/page/{page}")]
+        [Route("{blog}/page/{page}")]
         public async Task<IActionResult> AuthorPostsPaged(string blog, int page)
         {
             if (!BlogExists(blog))
@@ -65,10 +63,10 @@ namespace Blogifier.Web.Controllers
             if (pagedList.Pager.RedirectToError)
                 return View("Error");
 
-            return View("~/Views/Blogifier/AuthorPosts.cshtml", pagedList);
+            return View("~/Views/Blogifier/Posts/ByBlog.cshtml", pagedList);
         }
 
-        [Route("blogs/{blog}/{slug}")]
+        [Route("{blog}/{slug}")]
         public IActionResult SinglePost(string blog, string slug)
         {
             if (!BlogExists(blog))
@@ -76,39 +74,7 @@ namespace Blogifier.Web.Controllers
 
             ViewBag.Title = "Post " + slug;
             var item = _postDb.BySlug(slug);
-            return View("~/Views/Blogifier/SinglePost.cshtml", item);
-        }
-
-        [Route("category/{blog}/{slug}")]
-        public async Task<IActionResult> Category(string blog, string slug)
-        {
-            if (!BlogExists(blog))
-                return View("Error");
-
-            ViewBag.Title = "Categories";
-            ViewBag.BlogSlug = blog;
-            ViewBag.Category = slug;
-
-            var pagedList = await _postDb.ByCategory(slug, blog, 1, AppSettings.ItemsPerPage);
-            return View("~/Views/Blogifier/CategoryPosts.cshtml", pagedList);
-        }
-
-        [Route("category/{blog}/{slug}/page/{page}")]
-        public async Task<IActionResult> PagedCategory(string blog, string slug, int page)
-        {
-            if (!BlogExists(blog))
-                return View("Error");
-
-            ViewBag.Title = "Categories";
-            ViewBag.BlogSlug = blog;
-            ViewBag.Category = slug;
-
-            var pagedList = await _postDb.ByCategory(slug, blog, page, AppSettings.ItemsPerPage);
-
-            if (pagedList.Pager.RedirectToError)
-                return View("Error");
-
-            return View("~/Views/Blogifier/CategoryPosts.cshtml", pagedList);
+            return View("~/Views/Blogifier/Posts/Single.cshtml", item);
         }
 
         private bool BlogExists(string slug)

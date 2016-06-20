@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blogifier.Web.Controllers
 {
+    [Route("admin")]
     public class AdminController : Controller
     {
         IBlogRepository _blogDb;
@@ -17,7 +18,7 @@ namespace Blogifier.Web.Controllers
             _postDb = postsDb;
         }
 
-        [Route("admin/{blog}")]
+        [Route("{blog}")]
         public async Task<IActionResult> Index(string blog)
         {
             if (!BlogExists(blog))
@@ -30,7 +31,7 @@ namespace Blogifier.Web.Controllers
             return View("~/Views/Blogifier/Admin/Dashboard.cshtml", pagedList);
         }
 
-        [Route("admin/{blog}/page/{page}")]
+        [Route("{blog}/page/{page}")]
         public async Task<IActionResult> PostsPaged(string blog, int page)
         {
             if (!BlogExists(blog))
@@ -47,7 +48,7 @@ namespace Blogifier.Web.Controllers
             return View("~/Views/Blogifier/Admin/Dashboard.cshtml", pagedList);
         }
 
-        [Route("admin/{blog}/new")]
+        [Route("{blog}/new")]
         public async Task<IActionResult> AdminNewPost(string blog)
         {
             if (!BlogExists(blog))
@@ -61,7 +62,7 @@ namespace Blogifier.Web.Controllers
             return View("~/Views/Blogifier/Admin/Editor.cshtml", item);
         }
 
-        [Route("admin/{blog}/profile")]
+        [Route("{blog}/profile")]
         public IActionResult AdminProfile(string blog)
         {
             if (!BlogExists(blog))
@@ -71,7 +72,7 @@ namespace Blogifier.Web.Controllers
             return View("~/Views/Blogifier/Profile.cshtml");
         }
 
-        [Route("admin/{blog}/{slug}")]
+        [Route("{blog}/{slug}")]
         public IActionResult AdminEdit(string blog, string slug)
         {
             if (!BlogExists(blog))
@@ -84,7 +85,7 @@ namespace Blogifier.Web.Controllers
         }
 
         [HttpPost]
-        [Route("admin/{blog}/{slug}/save")]
+        [Route("{blog}/{slug}/save")]
         public async Task<ActionResult> PostSave(PostDetail model, string blog, string slug)
         {
             Core.Models.Post post;
@@ -96,16 +97,15 @@ namespace Blogifier.Web.Controllers
             {
                 post = await _postDb.Add(model.Post);
             }
-            var url = string.Format("~/admin/{0}/{1}", blog, post.Slug);
+            var url = string.Format("~/{0}/{1}/{2}", Constants.Admin, blog, post.Slug);
             return Redirect(url);
         }
 
-        [Route("admin/{blog}/delete/{id}")]
+        [Route("{blog}/delete/{id}")]
         public async Task<ActionResult> PostDelete(string blog, int id)
         {
             await _postDb.Delete(id);
-
-            var url = string.Format("~/admin/{0}", blog);
+            var url = string.Format("~/{0}/{1}", Constants.Admin, blog);
             return Redirect(url);
         }
 

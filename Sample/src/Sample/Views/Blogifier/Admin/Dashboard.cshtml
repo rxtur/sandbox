@@ -3,28 +3,28 @@
     var theme = "Bootstrap";
     Layout = "~/Views/Blogifier/Admin/Themes/" + theme + "/_Layout.cshtml";
 
-    var olderUrl = string.Format("/admin/{0}/page/{1}", ViewBag.BlogSlug,  Model.Pager.OlderPage);
+    var olderUrl = string.Format("/{0}/{1}/page/{2}", Blogifier.Constants.Admin, ViewBag.BlogSlug,  Model.Pager.OlderPage);
     var newerUrl = Model.CurrentPage < 3 ? 
-        string.Format("/admin/{0}", ViewBag.BlogSlug) : 
-        string.Format("/admin/{0}/page/{1}", ViewBag.BlogSlug, Model.Pager.NewerPage);
+        string.Format("/{0}/{1}", Blogifier.Constants.Admin, ViewBag.BlogSlug) : 
+        string.Format("/{0}/{1}/page/{2}", Blogifier.Constants.Admin, ViewBag.BlogSlug, Model.Pager.NewerPage);
 }
 @foreach (var item in Model.Posts)
 {
     <div class="post">
         <header>
-            <h1><a href="/blogs/@item.BlogSlug/@item.Slug/">@item.Title</a></h1>
+            <h1><a href="/@Blogifier.Constants.Blogs/@item.BlogSlug/@item.Slug/">@item.Title</a></h1>
             <div>
                 <span>@string.Format("{0:MMM d, yyyy}", item.Published)</span>
                 @foreach (var cat in item.Categories)
                 {
-                    <span>| <a href="/category/@item.BlogSlug/@cat.Slug">@cat.Title</a></span>
+                    <span>| <a href="/@Blogifier.Constants.Category/@item.BlogSlug/@cat.Slug">@cat.Title</a></span>
                 }
             </div>
         </header>
         <p>@Html.Raw(item.Content)</p>
         <p>
-            <a class="btn btn-primary btn-lg" href="/admin/@item.BlogSlug/@item.Slug/" role="button">Edit</a>
-            <a class="btn btn-danger" href="/admin/@item.BlogSlug/delete/@item.PostId" role="button">Delete</a>
+            <a class="btn btn-primary btn-lg" href="/@Blogifier.Constants.Admin/@item.BlogSlug/@item.Slug/" role="button">Edit</a>
+            <a class="btn btn-danger" href="/@Blogifier.Constants.Admin/@item.BlogSlug/delete/@item.PostId" role="button">Delete</a>
         </p>
     </div>
 }
