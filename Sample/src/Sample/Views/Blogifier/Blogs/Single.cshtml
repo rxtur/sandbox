@@ -5,7 +5,7 @@
 }
 <div class="blog-post">
     <h2 class="blog-post-title">@Model.Post.Title</h2>
-    <p class="blog-post-meta">@string.Format("{0:MMM d, yyyy}", Model.Post.Published) by <a href="/@Blogifier.Constants.Blogs/@Model.Post.Blog.Slug">@Model.Post.Blog.AuthorName</a></p>
+    <p class="blog-post-meta">@string.Format("{0:MMM d, yyyy}", Model.Post.Published) by <a href="~/@Blogifier.Constants.Blogs/@Model.Post.Blog.Slug">@Model.Post.Blog.AuthorName</a></p>
     @Html.Raw(Model.Post.Content)
 </div>
 <form role="form">
