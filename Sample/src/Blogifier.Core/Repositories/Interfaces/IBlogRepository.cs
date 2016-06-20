@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Blogifier.Core.Models;
+using System.Threading.Tasks;
 
 namespace Blogifier.Core.Repositories.Interfaces
 {
     public interface IBlogRepository
     {
-        List<string> BlogsLookup();
         bool BlogExists(string slug);
+        Task<Blog> BySlug(string slug);
     }
 }

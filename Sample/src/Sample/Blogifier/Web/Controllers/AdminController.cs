@@ -48,13 +48,17 @@ namespace Blogifier.Web.Controllers
         }
 
         [Route("admin/{blog}/new")]
-        public IActionResult AdminNew(string blog)
+        public async Task<IActionResult> AdminNewPost(string blog)
         {
             if (!BlogExists(blog))
                 return View("Error");
 
+            var item = new PostDetail();
+            item.Post.Blog = await _blogDb.BySlug(blog);
+            item.Post.BlogId = item.Post.Blog.BlogId;
+
             ViewBag.Title = "Admin";
-            return View("~/Views/Blogifier/PostEditor.cshtml");
+            return View("~/Views/Blogifier/Admin/Editor.cshtml", item);
         }
 
         [Route("admin/{blog}/profile")]
@@ -80,22 +84,20 @@ namespace Blogifier.Web.Controllers
         }
 
         [HttpPost]
-        [Route("admin/{blog}/{slug}/update")]
-        public ActionResult PostUpdate(PostDetail model, string blog, string slug)
+        [Route("admin/{blog}/{slug}/save")]
+        public async Task<ActionResult> PostSave(PostDetail model, string blog, string slug)
         {
-            //if (item.Id > 0)
-            //{
-            //    await db.Update(item);
-            //}
-            //else
-            //{
-            //    await db.Add(item);
-
-            //    Context.Response.StatusCode = 201;
-            //}
-            return new ObjectResult(blog);
+            if(model.Post.PostId > 0)
+            {
+                await _postDb.Update(model.Post);
+            }
+            else
+            {
+                await _postDb.Add(model.Post);
+            }
+            var item = _postDb.BySlug(slug);
+            return View("~/Views/Blogifier/Admin/Editor.cshtml", item);
         }
-
 
         private bool BlogExists(string slug)
         {

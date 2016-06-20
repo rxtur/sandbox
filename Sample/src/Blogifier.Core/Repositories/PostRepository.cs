@@ -83,6 +83,38 @@ namespace Blogifier.Core.Repositories
             return item;
         }
 
+        public async Task Add(Post item)
+        {
+            item.Saved = DateTime.UtcNow;
+
+            //TODO: temp handling
+            item.Published = DateTime.UtcNow;
+            item.Slug = item.Title.Replace(" ", "-").ToLower();
+            item.Description = item.Content;
+
+            _db.Posts.Add(item);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task Update(Post item)
+        {
+            var itemToUpdate = await _db.Posts.FirstOrDefaultAsync(i => i.PostId == item.PostId);
+
+            itemToUpdate.Saved = DateTime.UtcNow;
+            itemToUpdate.Title = item.Title;
+            itemToUpdate.Content = item.Content;
+
+            _db.Posts.Update(itemToUpdate);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task Delete(int id)
+        {
+            var item = await _db.Posts.FirstOrDefaultAsync(i => i.PostId == id);
+            _db.Posts.Remove(item);
+            await _db.SaveChangesAsync();
+        }
+
         #region Methods
         private List<PostListItem> GetItems(List<Post> postList)
         {

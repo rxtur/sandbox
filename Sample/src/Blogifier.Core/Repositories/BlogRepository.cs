@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Blogifier.Core.Models;
+using Blogifier.Core.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Blogifier.Core.Repositories.Interfaces;
-using Blogifier.Core.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Blogifier.Core.Repositories
 {
@@ -21,9 +19,18 @@ namespace Blogifier.Core.Repositories
             return _db.Blogs.Select(b => b.Slug == slug).ToList().Count > 0;
         }
 
-        public List<string> BlogsLookup()
+        public async Task<Blog> BySlug(string slug)
         {
-            return _db.Blogs.Select(b => b.Slug).ToList();
+            return await _db.Blogs.AsNoTracking()
+                .FirstOrDefaultAsync(b => b.Slug == slug);
+        }
+
+        public int IdFromSlug(string slug)
+        {
+            var item = _db.Blogs.AsNoTracking()
+                .FirstOrDefault(b => b.Slug == slug);
+
+            return item.BlogId;
         }
     }
 }
