@@ -21,7 +21,7 @@ namespace Blogifier.Web.Controllers
         {
             ViewBag.Title = "All posts";
             var pagedList = await _postDb.Find(p => p.PostId > 0, 1, AppSettings.ItemsPerPage);
-            return View("~/Views/Blogifier/Posts/All.cshtml", pagedList);
+            return View("~/Views/Blogifier/Blogs/PostsAll.cshtml", pagedList);
         }
 
         [Route("page/{page}")]
@@ -33,7 +33,7 @@ namespace Blogifier.Web.Controllers
             if (pagedList.Pager.RedirectToError)
                 return View("Error");
 
-            return View("~/Views/Blogifier/Posts/All.cshtml", pagedList);
+            return View("~/Views/Blogifier/Blogs/PostsAll.cshtml", pagedList);
         }
 
         [Route("{blog}")]
@@ -46,7 +46,7 @@ namespace Blogifier.Web.Controllers
             ViewBag.BlogSlug = blog;
 
             var pagedList = await _postDb.Find(p => p.Blog.Slug == blog, 1, AppSettings.ItemsPerPage);
-            return View("~/Views/Blogifier/Posts/ByBlog.cshtml", pagedList);
+            return View("~/Views/Blogifier/Blogs/PostsByBlog.cshtml", pagedList);
         }
 
         [Route("{blog}/page/{page}")]
@@ -63,7 +63,7 @@ namespace Blogifier.Web.Controllers
             if (pagedList.Pager.RedirectToError)
                 return View("Error");
 
-            return View("~/Views/Blogifier/Posts/ByBlog.cshtml", pagedList);
+            return View("~/Views/Blogifier/Blogs/PostsByBlog.cshtml", pagedList);
         }
 
         [Route("{blog}/{slug}")]
@@ -74,7 +74,7 @@ namespace Blogifier.Web.Controllers
 
             ViewBag.Title = "Post " + slug;
             var item = _postDb.BySlug(slug);
-            return View("~/Views/Blogifier/Posts/Single.cshtml", item);
+            return View("~/Views/Blogifier/Blogs/Single.cshtml", item);
         }
 
         private bool BlogExists(string slug)
