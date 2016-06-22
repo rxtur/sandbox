@@ -11,19 +11,23 @@ namespace Blogifier.Core.Models
         public int BlogId { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 2)]
+        [StringLength(50, MinimumLength = 3)]
+        public string IdentityName { get; set; }
+
+        [Required]
+        [StringLength(50, MinimumLength = 3)]
         public string Slug { get; set; }
 
         [Required]
-        [StringLength(160, MinimumLength = 2)]
+        [StringLength(160, MinimumLength = 3)]
         public string Title { get; set; }
 
         [Required]
-        [StringLength(250, MinimumLength = 2)]
+        [StringLength(250, MinimumLength = 3)]
         public string Description { get; set; }
 
         [Required]
-        [StringLength(100, MinimumLength = 2)]
+        [StringLength(100, MinimumLength = 3)]
         public string AuthorName { get; set; }
 
         [Required]

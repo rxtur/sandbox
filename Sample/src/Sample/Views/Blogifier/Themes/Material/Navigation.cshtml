@@ -1,0 +1,42 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<nav class="navbar navbar-transparent navbar-fixed-top navbar-color-on-scroll" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button id="menu-toggle" type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar bar1"></span>
+                <span class="icon-bar bar2"></span>
+                <span class="icon-bar bar3"></span>
+            </button>
+            <div class="logo-container">
+                <ul class="nav navbar-nav">
+                    <li><a href="~/"><i class="material-icons">home</i> Home</a></li>
+                    <li><a href="~/blogs">Blogs</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="collapse navbar-collapse">
+            <form class="navbar-form navbar-right" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search...">
+                </div>
+            </form>
+            @if (User.Identity.IsAuthenticated)
+            {
+            <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a asp-controller="Admin" asp-action="Profile" title="Profile"><i class="material-icons">person</i> @User.Identity.Name</a>
+                    </li>
+                </ul>
+            </form>
+            }
+            else
+            {
+            <ul class="nav navbar-nav navbar-right">
+                <li><a asp-controller="Account" asp-action="Login">Log in</a></li>
+            </ul>
+            }
+        </div>
+    </div>
+</nav>

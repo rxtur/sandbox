@@ -3,7 +3,7 @@
 {
 <div class="post">
     <header>
-        <h1><a href="~/@Blogifier.Constants.Blogs/@item.BlogSlug/@item.Slug/">@item.Title</a></h1>
+        <h2><a href="~/@Blogifier.Constants.Blogs/@item.BlogSlug/@item.Slug/">@item.Title</a></h2>
         <div>
             <span>@string.Format("{0:MMM d, yyyy}", item.Published)</span>
             @foreach (var cat in item.Categories)
@@ -13,6 +13,8 @@
         </div>
     </header>
     <p>@Html.Raw(item.Content)</p>
-    <p><a class="btn btn-primary btn-lg" href="~/@Blogifier.Constants.Blogs/@item.BlogSlug/@item.Slug/" role="button">Learn more</a></p>
+    <p>
+        <button class="btn btn-raised btn-primary" onclick="location.href='@Url.Content("~/")@Blogifier.Constants.Blogs/@item.BlogSlug/@item.Slug'">Learn more</button>
+    </p>
 </div>
 }

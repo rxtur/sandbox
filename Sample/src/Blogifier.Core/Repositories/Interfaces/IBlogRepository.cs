@@ -7,5 +7,7 @@ namespace Blogifier.Core.Repositories.Interfaces
     {
         bool BlogExists(string slug);
         Task<Blog> BySlug(string slug);
+        Task<Blog> ByIdentity(string name);
+        Task<Blog> Add(Blog item);
     }
 }

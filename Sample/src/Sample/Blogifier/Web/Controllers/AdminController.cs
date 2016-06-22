@@ -1,5 +1,6 @@
 ﻿using Blogifier.Core.Repositories.Interfaces;
 using Blogifier.Core.Infrastructure;
+using Blogifier.Core.Models;
 using Blogifier.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -18,11 +19,32 @@ namespace Blogifier.Web.Controllers
             _postDb = postsDb;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var blog = await _blogDb.ByIdentity(User.Identity.Name);
+            if (blog == null)
+            {
+                var item = new Blog();
+                item.IdentityName = User.Identity.Name;
+                return View("~/Views/Blogifier/Admin/NewBlog.cshtml", item);
+            }
+
+            ViewBag.Title = "Admin";
+            ViewBag.BlogSlug = blog;
+
+            var pagedList = await _postDb.Find(p => p.Blog.Slug == blog.Slug, 1, AppSettings.ItemsPerPage);
+            return View("~/Views/Blogifier/Admin/Dashboard.cshtml", pagedList);
+        }
+
         [Route("{blog}")]
-        public async Task<IActionResult> Index(string blog)
+        public async Task<IActionResult> Blog(string blog)
         {
             if (!BlogExists(blog))
-                return View("Error");
+            {
+                var item = new Blog();
+                item.IdentityName = blog;
+                return View("~/Views/Blogifier/Admin/NewBlog.cshtml", item);
+            }
 
             ViewBag.Title = "Admin";
             ViewBag.BlogSlug = blog;
@@ -106,6 +128,23 @@ namespace Blogifier.Web.Controllers
         {
             await _postDb.Delete(id);
             var url = string.Format("~/{0}/{1}", Constants.Admin, blog);
+            return Redirect(url);
+        }
+
+        [HttpPost]
+        [Route("{blog}")]
+        public async Task<ActionResult> BlogSave(Blog model, string blog)
+        {
+            Blog item = new Blog();
+            if (model.BlogId > 0)
+            {
+                //item = await _postDb.Update(model.Post);
+            }
+            else
+            {
+                item = await _blogDb.Add(model);
+            }
+            var url = string.Format("~/{0}/{1}", Constants.Admin, item.Slug);
             return Redirect(url);
         }
 
