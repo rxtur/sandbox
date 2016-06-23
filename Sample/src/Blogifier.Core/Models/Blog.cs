@@ -35,6 +35,9 @@ namespace Blogifier.Core.Models
         [DataType(DataType.EmailAddress)]
         public string AuthorEmail { get; set; }
 
+        [Required]
+        public string Theme { get; set; }
+
         public DateTime Saved { get; set; }
 
         public List<Post> Posts { get; set; }

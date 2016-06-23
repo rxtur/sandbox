@@ -44,12 +44,40 @@ namespace Blogifier.Core.Repositories
                 .FirstOrDefaultAsync(b => b.Slug == slug);
         }
 
+        public async Task Delete(int id)
+        {
+            var item = await _db.Blogs.FirstOrDefaultAsync(i => i.BlogId == id);
+            _db.Blogs.Remove(item);
+            await _db.SaveChangesAsync();
+        }
+
         public int IdFromSlug(string slug)
         {
             var item = _db.Blogs.AsNoTracking()
                 .FirstOrDefault(b => b.Slug == slug);
 
             return item.BlogId;
+        }
+
+        public async Task<Blog> Update(Blog item)
+        {
+            var itemToUpdate = await _db.Blogs.FirstOrDefaultAsync(i => i.BlogId == item.BlogId);
+                                    
+            itemToUpdate.Title = item.Title;
+            itemToUpdate.Slug = item.Slug;
+            itemToUpdate.Description = item.Description;
+            itemToUpdate.AuthorEmail = item.AuthorEmail;
+            itemToUpdate.AuthorName = item.AuthorName;
+            itemToUpdate.Saved = DateTime.UtcNow;
+
+            _db.Blogs.Update(itemToUpdate);
+            await _db.SaveChangesAsync();
+
+            //if (item.Metas == null || item.Metas.Count == 0)
+            //{
+            //    //TODO: save meta
+            //}
+            return itemToUpdate;
         }
 
         private string SlugFromTitle(string title)

@@ -1,5 +1,42 @@
-﻿@{
-    var theme = "Standard";
-    Layout = "~/Views/Blogifier/Themes/" + theme + "/_Layout.cshtml";
+﻿@model Blogifier.Core.Models.Blog
+@{
+    var theme = "Bootstrap";
+    Layout = "~/Views/Blogifier/Admin/Themes/" + theme + "/_Layout.cshtml";
 }
-<div>user profile</div>
+@section ValidationScripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+<h2>Profile</h2>
+<form asp-controller="Admin" asp-action="Profile" role="form" method="post" >
+    <div class="form-group">
+        <div>Slug: @Model.Slug</div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Title">Title</label>
+        <input asp-for="Title" class="form-control" placeholder="Blog title" />
+        <span asp-validation-for="Title"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description">Description</label>
+        <input asp-for="Description" class="form-control" placeholder="Description" />
+        <span asp-validation-for="Description"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="AuthorName">Author name</label>
+        <input asp-for="AuthorName" class="form-control" placeholder="Author name" />
+        <span asp-validation-for="AuthorName"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="AuthorEmail">Email</label>
+        <input asp-for="AuthorEmail" class="form-control" placeholder="Email" />
+        <span asp-validation-for="AuthorEmail"></span>
+    </div>
+    <p>
+        <button class="btn btn-success btn-lg" type="submit">Save</button>
+        <button class="btn btn-default" type="button" onclick="location.href='@Url.Content("~/")admin'">Cancel</button>
+    </p>
+    <input asp-for="BlogId" hidden="hidden" />
+    <input asp-for="IdentityName" hidden="hidden" />
+    <input asp-for="Slug" hidden="hidden" />
+</form>

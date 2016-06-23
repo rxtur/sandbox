@@ -8,5 +8,6 @@
         public static string Title { get; set; }
         public static string Description { get; set; }
         public static int ItemsPerPage { get; set; }
+        public static string Theme { get; set; }
     }
 }

@@ -1,12 +1,14 @@
-﻿using Blogifier.Core.Repositories.Interfaces;
-using Blogifier.Core.Infrastructure;
+﻿using Blogifier.Core.Infrastructure;
 using Blogifier.Core.Models;
+using Blogifier.Core.Repositories.Interfaces;
 using Blogifier.Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Blogifier.Web.Controllers
 {
+    [Authorize]
     [Route("admin")]
     public class AdminController : Controller
     {
@@ -21,12 +23,12 @@ namespace Blogifier.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var blog = await _blogDb.ByIdentity(User.Identity.Name);
+            var blog = GetUserBlog();
             if (blog == null)
             {
-                var item = new Blog();
-                item.IdentityName = User.Identity.Name;
-                return View("~/Views/Blogifier/Admin/NewBlog.cshtml", item);
+                blog = new Blog();
+                blog.IdentityName = User.Identity.Name;
+                return View("~/Views/Blogifier/Admin/Profile.cshtml", blog);
             }
 
             ViewBag.Title = "Admin";
@@ -36,39 +38,54 @@ namespace Blogifier.Web.Controllers
             return View("~/Views/Blogifier/Admin/Dashboard.cshtml", pagedList);
         }
 
-        [Route("{blog}")]
-        public async Task<IActionResult> Blog(string blog)
+        [Route("page/{page}")]
+        public async Task<IActionResult> PostsPaged(int page)
         {
-            if (!BlogExists(blog))
-            {
-                var item = new Blog();
-                item.IdentityName = blog;
-                return View("~/Views/Blogifier/Admin/NewBlog.cshtml", item);
-            }
-
-            ViewBag.Title = "Admin";
-            ViewBag.BlogSlug = blog;
-
-            var pagedList = await _postDb.Find(p => p.Blog.Slug == blog, 1, AppSettings.ItemsPerPage);
-            return View("~/Views/Blogifier/Admin/Dashboard.cshtml", pagedList);
-        }
-
-        [Route("{blog}/page/{page}")]
-        public async Task<IActionResult> PostsPaged(string blog, int page)
-        {
-            if (!BlogExists(blog))
+            var blog = GetUserBlog();
+            if (blog == null)
                 return View("Error");
 
             ViewBag.Title = "Admin ";
             ViewBag.BlogSlug = blog;
 
-            var pagedList = await _postDb.Find(p => p.Blog.Slug == blog, page, AppSettings.ItemsPerPage);
+            var pagedList = await _postDb.Find(p => p.Blog.Slug == blog.Slug, page, AppSettings.ItemsPerPage);
 
             if (pagedList.Pager.RedirectToError)
                 return View("Error");
 
             return View("~/Views/Blogifier/Admin/Dashboard.cshtml", pagedList);
         }
+
+        [Route("profile")]
+        public IActionResult Profile()
+        {
+            ViewBag.Title = "Profile";
+            var blog = GetUserBlog();
+            if (blog == null)
+            {
+                blog = new Blog();
+                blog.IdentityName = User.Identity.Name;
+            }
+            return View("~/Views/Blogifier/Admin/Profile.cshtml", blog);
+        }
+
+        [HttpPost]
+        [Route("profile")]
+        public async Task<ActionResult> Profile(Blog model)
+        {
+            Blog item = new Blog();
+            if (model.BlogId > 0)
+            {
+                item = await _blogDb.Update(model);
+            }
+            else
+            {
+                item = await _blogDb.Add(model);
+            }
+            return View("~/Views/Blogifier/Admin/Profile.cshtml", item);
+        }
+
+
 
         [Route("{blog}/new")]
         public async Task<IActionResult> AdminNewPost(string blog)
@@ -82,16 +99,6 @@ namespace Blogifier.Web.Controllers
 
             ViewBag.Title = "Admin";
             return View("~/Views/Blogifier/Admin/Editor.cshtml", item);
-        }
-
-        [Route("{blog}/profile")]
-        public IActionResult AdminProfile(string blog)
-        {
-            if (!BlogExists(blog))
-                return View("Error");
-
-            ViewBag.Title = "Admin";
-            return View("~/Views/Blogifier/Profile.cshtml");
         }
 
         [Route("{blog}/{slug}")]
@@ -131,26 +138,16 @@ namespace Blogifier.Web.Controllers
             return Redirect(url);
         }
 
-        [HttpPost]
-        [Route("{blog}")]
-        public async Task<ActionResult> BlogSave(Blog model, string blog)
-        {
-            Blog item = new Blog();
-            if (model.BlogId > 0)
-            {
-                //item = await _postDb.Update(model.Post);
-            }
-            else
-            {
-                item = await _blogDb.Add(model);
-            }
-            var url = string.Format("~/{0}/{1}", Constants.Admin, item.Slug);
-            return Redirect(url);
-        }
-
         private bool BlogExists(string slug)
         {
             return _blogDb.BlogExists(slug);
+        }
+
+        private Blog GetUserBlog()
+        {
+            //TODO: use cache
+            var blog = _blogDb.ByIdentity(User.Identity.Name);
+            return blog.Result;
         }
     }
 }

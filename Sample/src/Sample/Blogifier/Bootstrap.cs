@@ -20,6 +20,7 @@ namespace Blogifier
 
             AppSettings.Title = "Name of the blog";
             AppSettings.Description = "Short description of the blog";
+            AppSettings.Theme = "Standard";
             AppSettings.ItemsPerPage = 2;
             AppSettings.ConnectionString = "Server=.\\SQLEXPRESS;Database=Blogifier;Trusted_Connection=True;MultipleActiveResultSets=true";
 

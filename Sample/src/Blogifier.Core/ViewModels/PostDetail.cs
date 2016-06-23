@@ -10,6 +10,7 @@ namespace Blogifier.Core.ViewModels
             Post = new Post();
             Categories = new List<CategoryListItem>();
         }
+        public Blog Blog { get; set; }
         public Post Post { get; set; }
         public List<CategoryListItem> Categories { get; set; }
     }

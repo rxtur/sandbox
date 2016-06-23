@@ -1,7 +1,7 @@
 ﻿@model Blogifier.Core.ViewModels.PostDetail
 @{
-    var theme = "Standard";
-    Layout = "~/Views/Blogifier/Themes/" + theme + "/_Layout.cshtml";
+    Layout = string.Format("~/Views/Blogifier/Themes/{0}/_Layout.cshtml",
+        Blogifier.Core.Infrastructure.AppSettings.Theme);
 }
 <div class="blog-post">
     <h2 class="blog-post-title">@Model.Post.Title</h2>

@@ -9,5 +9,7 @@ namespace Blogifier.Core.Repositories.Interfaces
         Task<Blog> BySlug(string slug);
         Task<Blog> ByIdentity(string name);
         Task<Blog> Add(Blog item);
+        Task<Blog> Update(Blog item);
+        Task Delete(int id);
     }
 }

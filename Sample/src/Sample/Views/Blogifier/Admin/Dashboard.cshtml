@@ -3,10 +3,10 @@
     var theme = "Bootstrap";
     Layout = "~/Views/Blogifier/Admin/Themes/" + theme + "/_Layout.cshtml";
 
-    var olderUrl = string.Format("/{0}/{1}/page/{2}", Blogifier.Constants.Admin, ViewBag.BlogSlug,  Model.Pager.OlderPage);
+    var olderUrl = string.Format("/{0}/page/{1}", Blogifier.Constants.Admin, Model.Pager.OlderPage);
     var newerUrl = Model.CurrentPage < 3 ? 
-        string.Format("/{0}/{1}", Blogifier.Constants.Admin, ViewBag.BlogSlug) : 
-        string.Format("/{0}/{1}/page/{2}", Blogifier.Constants.Admin, ViewBag.BlogSlug, Model.Pager.NewerPage);
+        string.Format("/{0}", Blogifier.Constants.Admin) : 
+        string.Format("/{0}/page/{1}", Blogifier.Constants.Admin, Model.Pager.NewerPage);
 }
 @foreach (var item in Model.Posts)
 {

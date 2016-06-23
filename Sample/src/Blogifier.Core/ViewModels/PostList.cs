@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Blogifier.Core.Models;
+using System.Collections.Generic;
 
 namespace Blogifier.Core.ViewModels
 {
@@ -10,6 +11,7 @@ namespace Blogifier.Core.ViewModels
             CurrentPage = page;
             PageSize = pageSize;
         }
+        public Blog Blog { get; set; }
         public List<PostListItem> Posts { get; set; }
         public int CurrentPage { get; set; }
         public int PageSize { get; set; }
