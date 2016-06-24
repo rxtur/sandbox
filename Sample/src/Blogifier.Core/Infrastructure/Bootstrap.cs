@@ -5,7 +5,7 @@ using Blogifier.Core.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Blogifier
+namespace Blogifier.Core.Infrastructure
 {
     public class Bootstrap
     {

@@ -53,7 +53,7 @@ namespace Sample
                 .AddDefaultTokenProviders();
 
             //----------------------------------
-            Blogifier.Bootstrap.Configure(services);
+            Blogifier.Core.Infrastructure.Bootstrap.Configure(services);
             //----------------------------------
 
             services.AddMvc();
