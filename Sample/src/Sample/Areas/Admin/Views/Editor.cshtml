@@ -2,7 +2,7 @@
 @model Blogifier.Core.ViewModels.PostDetail
 @{
     var theme = "Bootstrap";
-    Layout = "~/Views/Blogifier/Admin/Themes/" + theme + "/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Themes/" + theme + "/_Layout.cshtml";
 }
 <form asp-controller="Admin" asp-action="Editor" asp-route-slug="" role="form" method="post">
     <div class="row">

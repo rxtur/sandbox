@@ -97,7 +97,8 @@
       "Views",
       "appsettings.json",
       "web.config",
-      "Areas/Admin/Views"
+      "Areas/Admin/Views",
+      "Areas/Blog/Views"
     ]
   },
 

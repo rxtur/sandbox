@@ -8,7 +8,7 @@
         string.Format("{0}", Blogifier.Constants.Blogs) : 
         string.Format("{0}/page/{1}", Blogifier.Constants.Blogs, Model.Pager.NewerPage);
 }
-@Html.Partial("~/Views/Blogifier/Blogs/Loop.cshtml", Model)
+@Html.Partial("~/Areas/Blog/Views/Loop.cshtml", Model)
 <nav>
     <ul class="pager">
         <li class="@Model.Pager.NewerCss"><a href="~/@newerUrl"><span aria-hidden="true">&larr;</span> Newer</a></li>

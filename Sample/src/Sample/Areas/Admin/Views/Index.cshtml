@@ -2,7 +2,7 @@
 @model Blogifier.Core.ViewModels.PostList
 @{
     var theme = "Bootstrap";
-    Layout = "~/Views/Blogifier/Admin/Themes/" + theme + "/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Themes/" + theme + "/_Layout.cshtml";
 
     var olderUrl = string.Format("/{0}/page/{1}", Blogifier.Constants.Admin, Model.Pager.OlderPage);
     var newerUrl = Model.CurrentPage < 3 ? 
