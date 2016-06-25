@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace Blogifier.Web.Controllers
 {
     [Authorize]
+    [Area("Admin")]
     [Route("admin")]
     public class AdminController : Controller
     {
@@ -28,18 +29,18 @@ namespace Blogifier.Web.Controllers
             {
                 blog = new Blog();
                 blog.IdentityName = User.Identity.Name;
-                return View("~/Views/Blogifier/Admin/Profile.cshtml", blog);
+                return View("~/Areas/Admin/Views/Profile.cshtml", blog);
             }
 
             ViewBag.Title = "Admin";
             ViewBag.BlogSlug = blog;
 
             var pagedList = await _postDb.Find(p => p.Blog.Slug == blog.Slug, 1, AppSettings.ItemsPerPage);
-            return View("~/Views/Blogifier/Admin/Dashboard.cshtml", pagedList);
+            return View("~/Areas/Admin/Views/Index.cshtml", pagedList);
         }
 
         [Route("page/{page}")]
-        public async Task<IActionResult> PostsPaged(int page)
+        public async Task<IActionResult> Index(int page)
         {
             var blog = GetUserBlog();
             if (blog == null)
@@ -53,7 +54,7 @@ namespace Blogifier.Web.Controllers
             if (pagedList.Pager.RedirectToError)
                 return View("Error");
 
-            return View("~/Views/Blogifier/Admin/Dashboard.cshtml", pagedList);
+            return View("~/Areas/Admin/Views/Index.cshtml", pagedList);
         }
 
         [Route("profile")]
@@ -66,7 +67,7 @@ namespace Blogifier.Web.Controllers
                 blog = new Blog();
                 blog.IdentityName = User.Identity.Name;
             }
-            return View("~/Views/Blogifier/Admin/Profile.cshtml", blog);
+            return View("~/Areas/Admin/Views/Profile.cshtml", blog);
         }
 
         [HttpPost]
@@ -82,51 +83,57 @@ namespace Blogifier.Web.Controllers
             {
                 item = await _blogDb.Add(model);
             }
-            return View("~/Views/Blogifier/Admin/Profile.cshtml", item);
+            return View("~/Areas/Admin/Views/Profile.cshtml", item);
         }
 
-
-
-        [Route("{blog}/new")]
-        public async Task<IActionResult> AdminNewPost(string blog)
+        [Route("editor")]
+        public IActionResult Editor()
         {
-            if (!BlogExists(blog))
-                return View("Error");
-
             var item = new PostDetail();
-            item.Post.Blog = await _blogDb.BySlug(blog);
-            item.Post.BlogId = item.Post.Blog.BlogId;
-
-            ViewBag.Title = "Admin";
-            return View("~/Views/Blogifier/Admin/Editor.cshtml", item);
+            var blog = GetUserBlog();
+            if (blog == null)
+            {
+                var url = string.Format("~/{0}/profile", Constants.Admin);
+                return Redirect(url);
+            }
+            item.Blog = blog;
+            return View("~/Areas/Admin/Views/Editor.cshtml", item);
         }
 
-        [Route("{blog}/{slug}")]
-        public IActionResult AdminEdit(string blog, string slug)
+        [Route("editor/{slug}")]
+        public IActionResult Editor(string slug)
         {
-            if (!BlogExists(blog))
-                return View("Error");
-
-            ViewBag.Title = "AdminEdit";
-
             var item = _postDb.BySlug(slug);
-            return View("~/Views/Blogifier/Admin/Editor.cshtml", item);
+            var blog = GetUserBlog();
+            if (blog == null)
+            {
+                var url = string.Format("~/{0}/profile", Constants.Admin);
+                return Redirect(url);
+            }
+            item.Blog = blog;
+            return View("~/Areas/Admin/Views/Editor.cshtml", item);
         }
 
         [HttpPost]
-        [Route("{blog}/{slug}/save")]
-        public async Task<ActionResult> PostSave(PostDetail model, string blog, string slug)
+        [Route("editor")]
+        public async Task<ActionResult> Editor(PostDetail model)
         {
-            Core.Models.Post post;
+            Post post;
             if(model.Post.PostId > 0)
             {
                 post = await _postDb.Update(model.Post);
             }
             else
             {
+                var blog = GetUserBlog();
+                if (blog == null)
+                {
+                    return Redirect(string.Format("~/{0}/profile", Constants.Admin));
+                }
+                model.Post.BlogId = blog.BlogId;
                 post = await _postDb.Add(model.Post);
             }
-            var url = string.Format("~/{0}/{1}/{2}", Constants.Admin, blog, post.Slug);
+            var url = string.Format("~/{0}/editor/{1}", Constants.Admin, post.Slug);
             return Redirect(url);
         }
 

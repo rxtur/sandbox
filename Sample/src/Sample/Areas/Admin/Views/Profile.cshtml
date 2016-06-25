@@ -1,4 +1,5 @@
-﻿@model Blogifier.Core.Models.Blog
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Blogifier.Core.Models.Blog
 @{
     var theme = "Bootstrap";
     Layout = "~/Views/Blogifier/Admin/Themes/" + theme + "/_Layout.cshtml";
@@ -34,7 +35,7 @@
     </div>
     <p>
         <button class="btn btn-success btn-lg" type="submit">Save</button>
-        <button class="btn btn-default" type="button" onclick="location.href='@Url.Content("~/")admin'">Cancel</button>
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-default">Cancel</a>
     </p>
     <input asp-for="BlogId" hidden="hidden" />
     <input asp-for="IdentityName" hidden="hidden" />

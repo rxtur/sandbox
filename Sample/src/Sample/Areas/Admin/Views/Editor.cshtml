@@ -1,0 +1,80 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Blogifier.Core.ViewModels.PostDetail
+@{
+    var theme = "Bootstrap";
+    Layout = "~/Views/Blogifier/Admin/Themes/" + theme + "/_Layout.cshtml";
+}
+<form asp-controller="Admin" asp-action="Editor" asp-route-slug="" role="form" method="post">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <input asp-for="Post.Title" class="form-control" placeholder="Blog title" />
+                <span asp-validation-for="Post.Title"></span>
+            </div>
+            <div class="form-group">
+                <textarea id="txtContent">@Model.Post.Content</textarea>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-success" type="submit" onclick="submitPost()">Save</button>
+                <a asp-controller="Admin" asp-action="Delete" class="btn btn-danger">Delete</a>
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-default">Cancel</a>
+            </div>
+            <input id="hdnPostId" asp-for="Post.PostId" hidden="hidden" />
+            <textarea id="hdnContent" asp-for="Post.Content" hidden="hidden"></textarea>
+        </div>
+        <div class="col-md-4">
+            <div class="list-group">
+
+                <div class="list-group-item">
+                    <h4>Link example <a href="#"><span class="glyphicon glyphicon-edit pull-right" aria-hidden="true"></span></a></h4>
+                    <a class="list-group-item" href="#" onClick="insertAsset('<a href=\'http://www.google.com\'>Link example</a>')">
+                        <p>http://www.my.testsite.com</p>
+                    </a>
+                </div>
+
+                <div class="list-group-item">
+                    <h4>MyImageFile.png <a href="#"><span class="glyphicon glyphicon-edit pull-right" aria-hidden="true"></span></a></h4>
+                    <a class="list-group-item" href="#" onClick="insertAsset('<img src=\'http://placehold.it/70x70\'/>')">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <img src="http://placehold.it/70x70" />
+                            </div>
+                            <div class="col-lg-8">
+
+                                <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="list-group-item">
+                    <h4>my_video_file.mp4 <a href="#"><span class="glyphicon glyphicon-edit pull-right" aria-hidden="true"></span></a></h4>
+                    <a class="list-group-item" href="#" onClick="insertAsset('<img src=\'http://placehold.it/170x70\'/>')">
+                        <img src="http://placehold.it/170x70" />
+                        <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+@section ValidationScripts{
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src='~/bf/tinymce/tinymce.min.js'></script>
+<script>
+	tinymce.init({
+	    selector: '#txtContent'
+	});
+	var eidtPost = function(post){
+	    tinyMCE.activeEditor.setContent($(post).html());
+	}
+	var insertAsset = function(txt){
+	    tinymce.activeEditor.execCommand('mceInsertContent', false, txt);
+	}
+	var submitPost = function () {
+	    $(hdnContent).val(tinyMCE.activeEditor.getContent());
+	}
+</script>
+}
