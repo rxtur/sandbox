@@ -4,16 +4,20 @@
     var theme = "Bootstrap";
     Layout = "~/Areas/Admin/Views/Themes/" + theme + "/_Layout.cshtml";
 
-    var olderUrl = string.Format("/{0}/page/{1}", Blogifier.Constants.Admin, Model.Pager.OlderPage);
+    var olderUrl = string.Format("{0}{1}/page/{2}", @Url.Content("~/"), Blogifier.Constants.Admin, Model.Pager.OlderPage);
     var newerUrl = Model.CurrentPage < 3 ? 
-        string.Format("/{0}", Blogifier.Constants.Admin) : 
-        string.Format("/{0}/page/{1}", Blogifier.Constants.Admin, Model.Pager.NewerPage);
+        string.Format("{0}{1}", @Url.Content("~/"), Blogifier.Constants.Admin) : 
+        string.Format("{0}{1}/page/{2}", @Url.Content("~/"), Blogifier.Constants.Admin, Model.Pager.NewerPage);
 }
 @foreach (var item in Model.Posts)
 {
     <div class="post">
         <header>
-            <h1><a href="@Url.Content("~/")@Blogifier.Constants.Blogs/@item.BlogSlug/@item.Slug/">@item.Title</a></h1>
+            <h1>
+                <a href="@Url.Content("~/")@Blogifier.Constants.Blogs/@item.BlogSlug/@item.Slug/">
+                    @item.Title
+                </a>
+            </h1>
             <div>
                 <span>@string.Format("{0:MMM d, yyyy}", item.Published)</span>
             </div>
