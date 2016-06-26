@@ -1,7 +1,6 @@
 ﻿@model Blogifier.Core.ViewModels.PostList
 @{
-    Layout = string.Format("~/Areas/Blog/Views/Themes/{0}/_Layout.cshtml",
-        Blogifier.Core.Infrastructure.AppSettings.Theme);
+    Layout = string.Format("~/Areas/Blog/Views/Themes/{0}/_Layout.cshtml", Model.Blog.Theme);
 
     var olderUrl = string.Format("{0}/{1}/{2}/page/{3}", Blogifier.Constants.Category, ViewBag.BlogSlug, ViewBag.Category, Model.Pager.OlderPage);
     var newerUrl = Model.CurrentPage < 3 ?

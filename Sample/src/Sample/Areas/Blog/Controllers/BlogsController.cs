@@ -46,6 +46,7 @@ namespace Blogifier.Web.Controllers
             ViewBag.BlogSlug = blog;
 
             var pagedList = await _postDb.Find(p => p.Blog.Slug == blog, 1, AppSettings.ItemsPerPage);
+            pagedList.Blog = await _blogDb.BySlug(blog);
             return View("~/Areas/Blog/Views/PostsByBlog.cshtml", pagedList);
         }
 
@@ -59,6 +60,7 @@ namespace Blogifier.Web.Controllers
             ViewBag.BlogSlug = blog;
 
             var pagedList = await _postDb.Find(p => p.Blog.Slug == blog, page, AppSettings.ItemsPerPage);
+            pagedList.Blog = await _blogDb.BySlug(blog);
 
             if (pagedList.Pager.RedirectToError)
                 return View("Error");
@@ -67,13 +69,14 @@ namespace Blogifier.Web.Controllers
         }
 
         [Route("{blog}/{slug}")]
-        public IActionResult SinglePost(string blog, string slug)
+        public async Task<IActionResult> SinglePost(string blog, string slug)
         {
             if (!BlogExists(blog))
                 return View("Error");
 
             ViewBag.Title = "Post " + slug;
             var item = _postDb.BySlug(slug);
+            item.Blog = await _blogDb.BySlug(blog);
             return View("~/Areas/Blog/Views/Single.cshtml", item);
         }
 

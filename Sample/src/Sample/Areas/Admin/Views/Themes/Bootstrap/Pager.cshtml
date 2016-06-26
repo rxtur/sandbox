@@ -1,0 +1,14 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Blogifier.Core.ViewModels.PostList
+@{
+    var olderUrl = string.Format("{0}{1}/page/{2}", @Url.Content("~/"), Blogifier.Constants.Admin, Model.Pager.OlderPage);
+    var newerUrl = Model.CurrentPage < 3 ?
+        string.Format("{0}{1}", @Url.Content("~/"), Blogifier.Constants.Admin) :
+        string.Format("{0}{1}/page/{2}", @Url.Content("~/"), Blogifier.Constants.Admin, Model.Pager.NewerPage);
+}
+<nav>
+    <ul class="pager">
+        <li class="@Model.Pager.NewerCss"><a href="@newerUrl"><span aria-hidden="true">&larr;</span> Newer</a></li>
+        <li class="@Model.Pager.OlderCss"><a href="@olderUrl">Older <span aria-hidden="true">&rarr;</span></a></li>
+    </ul>
+</nav>

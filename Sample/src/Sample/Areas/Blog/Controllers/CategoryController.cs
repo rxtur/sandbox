@@ -28,6 +28,7 @@ namespace Blogifier.Web.Controllers
             ViewBag.Category = slug;
 
             var pagedList = await _postDb.ByCategory(slug, blog, 1, AppSettings.ItemsPerPage);
+            pagedList.Blog = await _blogDb.BySlug(blog);
             return View("~/Areas/Blog/Views/PostsByCategory.cshtml", pagedList);
         }
 
@@ -42,6 +43,7 @@ namespace Blogifier.Web.Controllers
             ViewBag.Category = slug;
 
             var pagedList = await _postDb.ByCategory(slug, blog, page, AppSettings.ItemsPerPage);
+            pagedList.Blog = await _blogDb.BySlug(blog);
 
             if (pagedList.Pager.RedirectToError)
                 return View("Error");
